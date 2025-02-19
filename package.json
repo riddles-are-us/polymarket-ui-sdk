@@ -1,0 +1,55 @@
+{
+  "name": "polymarket-ui-sdk",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "prepare": "npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.26.9",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "rollup": "^4.34.8",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^3.2.4",
+    "@storybook/addon-essentials": "^8.5.7",
+    "@storybook/addon-interactions": "^8.5.7",
+    "@storybook/addon-onboarding": "^8.5.7",
+    "@storybook/blocks": "^8.5.7",
+    "@storybook/react": "^8.5.7",
+    "@storybook/react-vite": "^8.5.7",
+    "@storybook/test": "^8.5.7",
+    "@types/node": "^22.13.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "storybook": "^8.5.7",
+    "vite": "^6.1.0"
+  }
+}
