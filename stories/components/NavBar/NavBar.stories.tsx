@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { NavBar } from "../../../src/components/core/NavBar";
+import { Button } from "../../../src/components/core/Button";
+
 import { 
   HomeIcon,
   UserIcon,
@@ -25,13 +27,14 @@ const meta = {
     docs: {
       description: {
         component: `
-NavBar 是一个响应式导航栏组件，可以根据屏幕尺寸自动调整位置和布局。
+NavBar 是一个响应式导航栏组件，可以根据屏幕尺寸和位置设置自动调整布局。
 
 ## 特点
-- 响应式设计：在大屏幕显示在顶部，小屏幕显示在底部
+- 响应式设计：在大屏幕显示在顶部（靠右），小屏幕显示在底部（均匀分布）
 - 支持图标和文字
 - 可自定义位置
 - 自动处理激活状态
+- 顶部时靠右对齐，底部时均匀分布
 
 ## 用法
 
@@ -70,19 +73,33 @@ function App() {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// 基础导航栏
-export const Default: Story = {
+// 顶部导航栏（靠右）
+export const TopNav: Story = {
   args: {
     items: defaultItems,
     position: 'top'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '顶部导航栏示例，导航项靠右对齐。'
+      }
+    }
   }
 };
 
-// 底部导航栏
+// 底部导航栏（均匀分布）
 export const BottomNav: Story = {
   args: {
     items: defaultItems,
     position: 'bottom'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '底部导航栏示例，导航项均匀分布。'
+      }
+    }
   }
 };
 
@@ -106,56 +123,48 @@ export const FewItems: Story = {
   args: {
     items: defaultItems.slice(0, 3),
     position: 'top'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '展示较少导航项的布局效果。顶部时靠右对齐，底部时均匀分布。'
+      }
+    }
   }
 };
 
-// 模拟页面内容的完整示例
-export const WithContent: Story = {
+// 带按钮的导航栏示例
+export const WithButton: Story = {
   args: {
-    items: defaultItems,
+    items: [
+      { icon: <HomeIcon />, label: '首页', href: '/' },
+      { icon: <UserIcon />, label: '用户', href: '/user' },
+      {
+        icon: <Button 
+          icon={<ShoppingCartIcon />}
+          text="购物车" 
+          size="small"
+        />,
+        label: '',  // 使用Button组件时不需要额外的label
+        href: '/cart'
+      },
+      {
+        icon: <Button 
+          icon={<HeartIcon />}
+          text="收藏" 
+          size="small"
+        />,
+        label: '',
+        href: '/favorites'
+      }
+    ],
     position: 'top'
   },
-  render: (args) => (
-    <div className="min-h-screen bg-gray-100">
-      <NavBar {...args} />
-      <div className="max-w-7xl mx-auto px-4 py-20">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h1 className="text-2xl font-bold mb-4">页面内容</h1>
-          <p className="text-gray-600">
-            这是一个示例内容，用来展示导航栏在实际页面中的效果。
-            调整窗口大小可以看到导航栏的响应式变化。
-          </p>
-        </div>
-      </div>
-    </div>
-  )
+  parameters: {
+    docs: {
+      description: {
+        story: '展示如何在导航栏中嵌套使用Button组件，可以创建更丰富的导航项样式。'
+      }
+    }
+  }
 };
-
-// 自定义样式示例
-export const CustomStyle: Story = {
-  args: {
-    items: defaultItems.slice(0, 4),
-    position: 'top'
-  },
-  render: (args) => (
-    <div className="min-h-screen bg-gray-100">
-      <div className="mb-8">
-        <NavBar {...args} />
-      </div>
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-2">导航栏说明</h2>
-          <p className="text-gray-600">
-            导航栏会根据屏幕尺寸自动调整其位置和布局：
-          </p>
-          <ul className="list-disc ml-6 mt-2 text-gray-600">
-            <li>大屏幕：水平排列在顶部</li>
-            <li>小屏幕：垂直排列在底部</li>
-            <li>图标大小会根据屏幕尺寸自动调整</li>
-            <li>支持激活状态显示</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  )
-}; 
