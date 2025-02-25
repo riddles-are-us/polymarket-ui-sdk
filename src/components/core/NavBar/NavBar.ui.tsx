@@ -51,7 +51,7 @@ export const NavBarUI: React.FC<NavBarUIProps> = ({
                   },
                   width: iconSize.width,
                   height: iconSize.height,
-                  className: undefined
+                  className: `${isActive ? 'text-[#333333]' : 'text-[#666666]'}`
                 })
               : item.icon;
             
@@ -66,7 +66,7 @@ export const NavBarUI: React.FC<NavBarUIProps> = ({
                     e.preventDefault();
                     onItemClick(item.href);
                   }}
-                  style={{ textDecoration: 'none' }}
+                  style={{ textDecoration: 'none', color: isActive ? '#333333' : '#666666' }}
                   className={`
                     block w-full [text-decoration:none!important]
                     ${isActive ? 'text-[#333333]' : 'text-[#666666]'}
@@ -76,11 +76,18 @@ export const NavBarUI: React.FC<NavBarUIProps> = ({
                     <div className={`
                       flex flex-col items-center
                       ${isActive ? 'text-[#333333]' : 'text-[#666666]'}
+                      [&_svg]:text-current
                     `}>
-                      <div className="flex-shrink-0">
+                      <div className={`
+                        flex-shrink-0
+                        ${isActive ? 'text-[#333333]' : 'text-[#666666]'}
+                      `}>
                         {modifiedIcon}
                       </div>
-                      <span className="text-xs mt-1.5 whitespace-nowrap">
+                      <span className={`
+                        text-xs mt-1.5 whitespace-nowrap
+                        ${isActive ? 'text-[#333333]' : 'text-[#666666]'}
+                      `}>
                         {item.label}
                       </span>
                     </div>
