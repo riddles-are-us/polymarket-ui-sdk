@@ -35,7 +35,16 @@ export const NavBarUI: React.FC<NavBarUIProps> = ({
       w-full
     `}>
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex flex-row justify-around">
+        <div 
+          className={`
+            flex flex-row
+            ${isBottom ? 'justify-around w-full' : 'justify-end gap-8'}
+          `}
+          style={{ 
+            textAlign: isBottom ? 'center' : 'right',
+            justifyContent: isBottom ? 'space-around' : 'flex-end'
+          }}
+        >
           {items.map((item) => {
             const isActive = activeItem === item.href;
             const iconSize = isBottom ? iconSizes.large : iconSizes.small;
@@ -58,7 +67,14 @@ export const NavBarUI: React.FC<NavBarUIProps> = ({
             return (
               <div 
                 key={item.href} 
-                className="flex-1 text-center"
+                className={`
+                  ${isBottom ? 'flex-1' : ''} 
+                  text-center
+                `}
+                style={{
+                  textAlign: isBottom ? 'center' : 'right',
+                  display: 'inline-block',
+                }}
               >
                 <a
                   href={item.href}
