@@ -71,39 +71,63 @@ export const ButtonUI: React.FC<ButtonUIProps> = ({
       })
     : icon;
 
+  const loadingDotStyle = {
+    animation: 'dotAnimation 1.4s infinite',
+    opacity: 0.2,
+    margin: '0 2px'
+  };
+
+  const loadingKeyframes = `
+    @keyframes dotAnimation {
+      0%, 80%, 100% { opacity: 0.2; }
+      40% { opacity: 1; }
+    }
+  `;
+
   return (
-    <button
-      className={`
-        inline-flex items-center justify-center gap-2 rounded-md
-        ${sizeStyles[size].padding}
-        ${disabled ? 'bg-gray-200 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}
-        ${isHovered ? 'bg-blue-600' : ''}
-        text-white transition-colors duration-200
-      `}
-      disabled={disabled || loading}
-      onClick={onClick}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <div className="inline-flex items-center">
-        {loading && (
-          <div className={`
-            flex-shrink-0 animate-spin rounded-full border-2 border-white border-t-transparent
-            ${sizeStyles[size].loading}
-          `} />
-        )}
-        {!loading && icon && (
-          <div className="flex-shrink-0">
-            {modifiedIcon}
-          </div>
-        )}
-      </div>
-      <span 
-        className="inline-block align-middle" 
-        style={{ fontSize: size === 'small' ? '0.875rem' : size === 'medium' ? '1rem' : '1.125rem' }}
+    <>
+      <style>{loadingKeyframes}</style>
+      <button
+        className={`
+          inline-flex items-center justify-center gap-2 rounded-md
+          ${sizeStyles[size].padding}
+          ${disabled 
+            ? 'bg-gray-200 cursor-not-allowed' 
+            : loading
+              ? 'bg-blue-400 cursor-wait'
+              : 'bg-blue-500 hover:bg-blue-600'
+          }
+          ${isHovered && !disabled && !loading ? 'bg-blue-600' : ''}
+          text-white transition-colors duration-200
+        `}
+        disabled={disabled || loading}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
       >
-        {text}
-      </span>
-    </button>
+        <div className="inline-flex items-center">
+          {loading ? (
+            <div className="flex items-center justify-center">
+              <span style={{ ...loadingDotStyle, animationDelay: '0s' }}>.</span>
+              <span style={{ ...loadingDotStyle, animationDelay: '0.2s' }}>.</span>
+              <span style={{ ...loadingDotStyle, animationDelay: '0.4s' }}>.</span>
+            </div>
+          ) : icon ? (
+            <div className="flex-shrink-0">
+              {modifiedIcon}
+            </div>
+          ) : null}
+        </div>
+        <span 
+          className="inline-block align-middle"
+          style={{ 
+            fontSize: size === 'small' ? '0.875rem' : size === 'medium' ? '1rem' : '1.125rem',
+            opacity: loading ? 0.7 : 1
+          }}
+        >
+          {loading ? 'loading' : text}
+        </span>
+      </button>
+    </>
   );
 }; 
