@@ -39,7 +39,7 @@ NavBar 是一个响应式导航栏组件，可以根据屏幕尺寸和位置设�
 ## 用法
 
 \`\`\`jsx
-import { NavBar } from 'your-component-library';
+import { NavBar } from 'polymarket-ui-sdk';
 import { HomeIcon, UserIcon } from '@heroicons/react/24/outline';
 
 const items = [
