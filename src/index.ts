@@ -7,20 +7,51 @@ export * from "./hooks";
 // Types
 export * from "./types";
 
-export { Navbar } from "./components/Navbar/Navbar";
-export type { NavbarProps } from "./components/Navbar/Navbar";
+// Re-export specific components and types
+export {
+  // Navbar
+  NavbarUI,
+  NavbarWidget,
+  useNavbar,
+} from "./components/Navbar";
+export type { NavbarUIProps } from "./components/Navbar";
 
-export { MarketChart } from "./components/MarketChart/MarketChart";
-export type { MarketChartProps, MarketData } from "./components/MarketChart/MarketChart";
+export {
+  // Market Chart
+  MarketChartUI,
+  MarketChartWidget,
+  useMarketChart,
+} from "./components/MarketChart";
+export type { MarketChartUIProps, ChartData } from "./components/MarketChart";
 
-export { TradingPanel } from "./components/TradingPanel/TradingPanel";
-export type { TradingPanelProps } from "./components/TradingPanel/TradingPanel";
+export {
+  // Trading Panel
+  TradingPanelUI,
+  TradingPanelWidget,
+  useTradingPanel,
+} from "./components/TradingPanel";
+export type { TradingPanelUIProps, TradingPanelWidgetProps } from "./components/TradingPanel";
 
-export { OrderBook } from "./components/OrderBook/OrderBook";
-export type { OrderBookProps, Order } from "./components/OrderBook/OrderBook";
+export {
+  // Order Book
+  OrderBookUI,
+  OrderBookWidget,
+  useOrderBook,
+} from "./components/OrderBook";
+export type { OrderBookUIProps, OrderItem } from "./components/OrderBook";
 
-export { Comments } from "./components/Comments/Comments";
-export type { CommentsProps, Comment } from "./components/Comments/Comments";
+export {
+  // Comments
+  CommentsUI,
+  CommentsWidget,
+  useComments,
+} from "./components/Comments";
+export type { CommentsUIProps, CommentItem, CommentAuthor } from "./components/Comments";
 
-export { MarketPage } from "./components/MarketPage/MarketPage";
-export type { MarketPageProps } from "./components/MarketPage/MarketPage";
+export {
+  // Market Page
+  MarketPageUI,
+  MarketPageWidget,
+  useMarketPage,
+} from "./components/MarketPage";
+export type { MarketPageUIProps, MarketPageWidgetProps } from "./components/MarketPage";

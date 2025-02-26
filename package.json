@@ -35,6 +35,8 @@
     "@rollup/plugin-typescript": "^12.1.2",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "date-fns": "^4.1.0",
+    "recharts": "^2.15.1",
     "rollup": "^4.34.8",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "typescript": "^5.7.3"

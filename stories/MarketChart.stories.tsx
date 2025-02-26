@@ -1,45 +1,53 @@
+import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { MarketChart } from "../src/components/MarketChart/MarketChart";
+import { MarketChartUI, MarketChartWidget } from "../src/components/MarketChart";
 
-const meta: Meta<typeof MarketChart> = {
+const meta = {
   title: "Components/MarketChart",
-  component: MarketChart,
+  component: MarketChartUI,
   parameters: {
-    layout: "padded",
+    layout: "centered",
   },
-};
+  tags: ["autodocs"],
+} satisfies Meta<typeof MarketChartUI>;
 
 export default meta;
-type Story = StoryObj<typeof MarketChart>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    data: {
-      title: "Will Kanye launch a coin in February?",
-      volume: "$23,699,480",
-      endDate: "Feb 28, 2025",
-      currentPrice: 23,
-      priceChange: 1.2,
-      chartData: Array.from({ length: 30 }, (_, i) => ({
-        date: new Date(2024, 1, i + 1).toISOString(),
-        price: Math.random() * 30 + 10,
-      })),
+    title: "Sample Market",
+    subtitle: "Volume: $1.2M • End Date: Dec 31, 2024",
+    mainValue: "75",
+    changeValue: 2.5,
+    chartData: Array.from({ length: 30 }, (_, i) => ({
+      date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
+      price: 75 + Math.random() * 10 - 5,
+    })),
+  },
+};
+
+export const WithNegativeChange: Story = {
+  args: {
+    ...Default.args,
+    changeValue: -2.5,
+  },
+};
+
+export const WithActions: Story = {
+  args: {
+    ...Default.args,
+    actions: {
+      onBookmark: () => console.log("Bookmark clicked"),
+      onShare: () => console.log("Share clicked"),
+      onCopy: () => console.log("Copy clicked"),
     },
   },
 };
 
-export const Negative: Story = {
+export const WithWidget: Story = {
   args: {
-    data: {
-      title: "Will Kanye launch a coin in February?",
-      volume: "$23,699,480",
-      endDate: "Feb 28, 2025",
-      currentPrice: 23,
-      priceChange: -2.5,
-      chartData: Array.from({ length: 30 }, (_, i) => ({
-        date: new Date(2024, 1, i + 1).toISOString(),
-        price: Math.random() * 30 + 10,
-      })),
-    },
+    ...Default.args,
   },
+  render: () => <MarketChartWidget />,
 };

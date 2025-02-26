@@ -1,32 +1,58 @@
+import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { OrderBook } from "../src/components/OrderBook/OrderBook";
+import { OrderBookUI, OrderBookWidget } from "../src/components/OrderBook";
 
-const meta: Meta<typeof OrderBook> = {
+const meta = {
   title: "Components/OrderBook",
-  component: OrderBook,
+  component: OrderBookUI,
   parameters: {
-    layout: "padded",
+    layout: "centered",
   },
-};
+  tags: ["autodocs"],
+} satisfies Meta<typeof OrderBookUI>;
 
 export default meta;
-type Story = StoryObj<typeof OrderBook>;
+type Story = StoryObj<typeof meta>;
+
+const mockAsks = Array.from({ length: 5 }, (_, i) => ({
+  price: 75 + i * 0.5,
+  quantity: Math.floor(Math.random() * 10000) + 1000,
+  total: Math.floor(Math.random() * 10000) + 1000,
+}));
+
+const mockBids = Array.from({ length: 5 }, (_, i) => ({
+  price: 75 - i * 0.5,
+  quantity: Math.floor(Math.random() * 10000) + 1000,
+  total: Math.floor(Math.random() * 10000) + 1000,
+}));
 
 export const Default: Story = {
   args: {
-    asks: [
-      { price: 24, shares: 1629.76, total: 10625.57 },
-      { price: 23, shares: 24160.8, total: 10234.43 },
-      { price: 22, shares: 15056.57, total: 4677.45 },
-      { price: 21, shares: 6499.99, total: 1365.0 },
-    ],
-    bids: [
-      { price: 20, shares: 5383.83, total: 1076.77 },
-      { price: 19, shares: 9668.25, total: 2913.74 },
-      { price: 18, shares: 29121.92, total: 8155.69 },
-      { price: 17, shares: 23501.68, total: 12150.98 },
-    ],
-    lastPrice: 21,
-    spread: 1,
+    asks: mockAsks,
+    bids: mockBids,
+    summary: {
+      lastPrice: 75,
+      spread: 0.5,
+    },
   },
+};
+
+export const WithCustomConfig: Story = {
+  args: {
+    ...Default.args,
+    config: {
+      priceUnit: "$",
+      quantityLabel: "Amount",
+      totalLabel: "Value",
+      askColor: "text-orange-500",
+      bidColor: "text-blue-500",
+    },
+  },
+};
+
+export const WithWidget: Story = {
+  args: {
+    ...Default.args,
+  },
+  render: () => <OrderBookWidget />,
 };

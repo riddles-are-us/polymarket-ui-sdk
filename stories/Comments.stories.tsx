@@ -1,53 +1,86 @@
+import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { Comments } from "../src/components/Comments/Comments";
+import { CommentsUI, CommentsWidget } from "../src/components/Comments";
 
-const meta: Meta<typeof Comments> = {
+const meta = {
   title: "Components/Comments",
-  component: Comments,
+  component: CommentsUI,
   parameters: {
-    layout: "padded",
+    layout: "centered",
   },
-};
+  tags: ["autodocs"],
+} satisfies Meta<typeof CommentsUI>;
 
 export default meta;
-type Story = StoryObj<typeof Comments>;
+type Story = StoryObj<typeof meta>;
+
+const mockComments = [
+  {
+    id: "1",
+    author: {
+      name: "John Doe",
+      position: "Market Analyst",
+      avatar: "https://i.pravatar.cc/150?u=john",
+    },
+    content: "This market is showing strong potential for growth in the coming weeks.",
+    timestamp: "2 hours ago",
+    likes: 24,
+    userHasLiked: false,
+  },
+  {
+    id: "2",
+    author: {
+      name: "Jane Smith",
+      position: "Trader",
+      avatar: "https://i.pravatar.cc/150?u=jane",
+    },
+    content: "The recent price movement suggests a bullish trend.",
+    timestamp: "5 hours ago",
+    likes: 15,
+    userHasLiked: true,
+  },
+];
 
 export const Default: Story = {
   args: {
-    comments: [
-      {
-        id: "1",
-        author: {
-          name: "Hoviking",
-          position: "92 No",
-        },
-        content: "I can't possibly understand that YE wants to do his own coin lol",
-        timestamp: "19m ago",
-        likes: 0,
-      },
-      {
-        id: "2",
-        author: {
-          name: "sox",
-          position: "8 No",
-        },
-        content: "positive pnl",
-        timestamp: "42m ago",
-        likes: 0,
-      },
-      {
-        id: "3",
-        author: {
-          name: "Iranon",
-          position: "14.0K Yes",
-        },
-        content:
-          "If you're an insider and still lose money on this market, then I just can't find words to condemn you.",
-        timestamp: "56m ago",
-        likes: 3,
-        userHasLiked: true,
-      },
-    ],
-    totalComments: 10448,
+    comments: mockComments,
+    totalComments: mockComments.length,
+    onAddComment: (content) => console.log("Add comment:", content),
+    onLikeComment: (id) => console.log("Like comment:", id),
   },
+};
+
+export const WithCustomConfig: Story = {
+  args: {
+    ...Default.args,
+    title: "Discussion",
+    newCommentPlaceholder: "Join the discussion...",
+    config: {
+      submitButtonText: "Send",
+      submitButtonColor: "bg-green-500 hover:bg-green-600",
+    },
+  },
+};
+
+export const WithCustomSort: Story = {
+  args: {
+    ...Default.args,
+    sortOptions: [
+      { label: "Most Recent", value: "recent" },
+      { label: "Most Liked", value: "liked" },
+      { label: "Most Active", value: "active" },
+    ],
+    selectedSort: "recent",
+    onSortChange: (value) => console.log("Sort changed:", value),
+  },
+};
+
+export const WithWidget: Story = {
+  args: {
+    comments: mockComments,
+    totalComments: mockComments.length,
+    onAddComment: (content) => console.log("Add comment:", content),
+    onLikeComment: (id) => console.log("Like comment:", id),
+  },
+  render: () => <CommentsWidget />,
 };

@@ -1,0 +1,35 @@
+import React from "react";
+import { NavbarWidget } from "../Navbar";
+import { MarketChartWidget } from "../MarketChart";
+import { TradingPanelWidget } from "../TradingPanel";
+import { OrderBookWidget } from "../OrderBook";
+import { CommentsWidget } from "../Comments";
+
+export interface MarketPageUIProps {
+  marketId: string;
+  className?: string;
+}
+
+export const MarketPageUI: React.FC<MarketPageUIProps> = ({ marketId, className = "" }) => {
+  return (
+    <div className={`min-h-screen bg-gray-900 ${className}`}>
+      <NavbarWidget />
+
+      <div className="container mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left column */}
+          <div className="lg:col-span-2 space-y-6">
+            <MarketChartWidget />
+            <OrderBookWidget />
+            <CommentsWidget />
+          </div>
+
+          {/* Right column */}
+          <div className="lg:col-span-1">
+            <TradingPanelWidget currentPrice={75} maxAmount={1000} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
