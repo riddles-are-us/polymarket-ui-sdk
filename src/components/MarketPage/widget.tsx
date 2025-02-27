@@ -10,15 +10,21 @@ export const MarketPageWidget: React.FC<MarketPageWidgetProps> = ({ marketId }) 
   const { marketData, isLoading, error } = useMarketPage(marketId);
 
   if (isLoading) {
-    return <div className="min-h-screen bg-gray-900 flex items-center justify-center">Loading...</div>;
+    return <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">Loading...</div>;
   }
 
   if (error) {
-    return <div className="min-h-screen bg-gray-900 flex items-center justify-center text-red-500">{error}</div>;
+    return (
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
   }
 
   if (!marketData) {
-    return <div className="min-h-screen bg-gray-900 flex items-center justify-center">Market not found</div>;
+    return (
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">Market not found</div>
+    );
   }
 
   return <MarketPageUI marketId={marketId} />;

@@ -42,76 +42,75 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
   className = "",
 }) => {
   return (
-    <div className={`bg-gray-900 p-6 rounded-lg ${className}`}>
-      <div className="flex mb-4">
+    <div className={`bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm ${className}`}>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
         <button
-          className={`flex-1 py-2 text-center rounded-l ${
-            selectedTab === "buy" ? config.buyButtonColor : "bg-gray-800 text-gray-400 hover:text-white"
+            onClick={() => onTabChange("buy")}
+            className={`px-4 py-2 rounded-md font-medium ${
+              selectedTab === "buy"
+                ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300"
+                : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
           }`}
-          onClick={() => onTabChange("buy")}
         >
           Buy
         </button>
         <button
-          className={`flex-1 py-2 text-center rounded-r ${
-            selectedTab === "sell" ? config.sellButtonColor : "bg-gray-800 text-gray-400 hover:text-white"
+            onClick={() => onTabChange("sell")}
+            className={`px-4 py-2 rounded-md font-medium ${
+              selectedTab === "sell"
+                ? "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300"
+                : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
           }`}
-          onClick={() => onTabChange("sell")}
         >
           Sell
         </button>
-      </div>
-
-      <div className="mb-6">
-        <label className="block text-gray-400 text-sm mb-2">Amount</label>
-        <div className="relative">
-          <input
-            type="text"
-            value={amount}
-            onChange={(e) => onAmountChange(e.target.value)}
-            className="w-full bg-gray-800 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter amount"
-          />
-          <span className="absolute right-3 top-2 text-gray-400">$</span>
+        </div>
+        <div className="text-gray-900 dark:text-white font-medium">
+          {currentPrice}
+          {priceUnit}
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-2 mb-6">
-        {quickAmounts.map((value, index) => (
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount</label>
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => onAmountChange(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
+                     text-gray-900 dark:text-white bg-white dark:bg-gray-700
+                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter amount..."
+          />
+      </div>
+
+        <div className="flex space-x-2">
+          {quickAmounts.map((quickAmount, index) => (
           <button
             key={index}
-            onClick={() => onQuickAmountClick(value === "Max" ? maxAmount : (value as number))}
-            className="bg-gray-800 text-gray-400 px-2 py-1 rounded hover:bg-gray-700 hover:text-white"
+              onClick={() => onQuickAmountClick(quickAmount)}
+              className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
+                       rounded-md text-gray-700 dark:text-gray-300 
+                       hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            {typeof value === "number" ? `$${value}` : value}
+              {quickAmount}
           </button>
         ))}
       </div>
 
-      <div className="space-y-2 mb-6">
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-400">Price</span>
-          <span className="text-white">
-            {currentPrice}
-            {priceUnit}
-          </span>
-        </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-400">Total Cost</span>
-          <span className="text-white">${((parseFloat(amount || "0") * currentPrice) / 100).toFixed(2)}</span>
-        </div>
-      </div>
-
       <button
         onClick={onSubmit}
-        className={`w-full py-3 rounded font-medium ${
+          className={`w-full py-2 px-4 rounded-md text-white font-medium ${
           selectedTab === "buy" ? config.buyButtonColor : config.sellButtonColor
-        } text-white`}
+          }`}
       >
         {selectedTab === "buy" ? config.buyButtonText : config.sellButtonText}
       </button>
 
-      {config.disclaimer && <p className="text-center text-gray-500 text-sm mt-4">{config.disclaimer}</p>}
+        <p className="text-sm text-gray-500 dark:text-gray-400 text-center">{config.disclaimer}</p>
+      </div>
     </div>
   );
 };

@@ -12,7 +12,7 @@ export interface MarketPageUIProps {
 
 export const MarketPageUI: React.FC<MarketPageUIProps> = ({ marketId, className = "" }) => {
   return (
-    <div className={`min-h-screen bg-gray-900 ${className}`}>
+    <div className={`min-h-screen bg-gray-100 dark:bg-gray-900 ${className}`}>
       <NavbarWidget />
 
       <div className="container mx-auto px-4 py-6">

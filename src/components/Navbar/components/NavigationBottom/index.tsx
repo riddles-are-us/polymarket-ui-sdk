@@ -26,7 +26,7 @@ export const NavigationBottomUI: React.FC<NavigationBottomUIProps> = ({ items, o
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-t border-gray-800 md:hidden safe-area-bottom ${className}`}
+      className={`fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-t border-gray-200 dark:border-gray-800 md:hidden safe-area-bottom ${className}`}
     >
       <div className="grid grid-cols-5 px-1">
         {navigationItems.map((item, index) => {
@@ -43,7 +43,7 @@ export const NavigationBottomUI: React.FC<NavigationBottomUIProps> = ({ items, o
                   item.onClick?.();
                 }
               }}
-              className="flex flex-col items-center justify-center py-1.5 text-gray-400 hover:text-white"
+              className="flex flex-col items-center justify-center py-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             >
               <Icon className="h-5 w-5 mb-0.5" />
               <span className="text-[10px] font-medium">{item.label}</span>

@@ -1,15 +1,25 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { CommentsUI, CommentsWidget } from "../src/components/Comments";
+import { ThemeProvider } from "../src/contexts/ThemeContext";
 
-const meta = {
+const meta: Meta<typeof CommentsUI> = {
   title: "Components/Comments",
   component: CommentsUI,
+  decorators: [
+    (Story) => (
+      <ThemeProvider>
+        <div className="p-4 bg-gray-100 dark:bg-gray-900 min-h-screen">
+          <Story />
+        </div>
+      </ThemeProvider>
+    ),
+  ],
   parameters: {
     layout: "centered",
   },
   tags: ["autodocs"],
-} satisfies Meta<typeof CommentsUI>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

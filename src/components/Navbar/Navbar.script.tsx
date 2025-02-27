@@ -1,8 +1,10 @@
 import { useCallback, useState } from "react";
+import { useDarkMode } from "../../hooks/useDarkMode";
 
 export const useNavbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState<string>();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const handleSearch = useCallback((query: string) => {
     console.log("Search:", query);
@@ -54,6 +56,10 @@ export const useNavbar = () => {
       onLogin: handleLogin,
       onSignUp: handleSignUp,
       onProfileClick: handleProfileClick,
+    },
+    darkMode: {
+      enabled: isDarkMode,
+      onToggle: toggleDarkMode,
     },
   };
 };

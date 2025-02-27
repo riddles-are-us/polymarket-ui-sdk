@@ -1,5 +1,6 @@
 import React from "react";
 import type { Preview } from "@storybook/react";
+import { ThemeProvider } from "../src/contexts/ThemeContext";
 import "../src/index.css";
 
 const preview: Preview = {
@@ -12,15 +13,15 @@ const preview: Preview = {
       },
     },
     backgrounds: {
-      default: "dark",
+      default: "light",
       values: [
+        {
+          name: "light",
+          value: "#F3F4F6",
+        },
         {
           name: "dark",
           value: "#111827",
-        },
-        {
-          name: "light",
-          value: "#ffffff",
         },
       ],
     },
@@ -28,9 +29,11 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <div className="min-h-screen bg-gray-900">
-        <Story />
-      </div>
+      <ThemeProvider>
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+          <Story />
+        </div>
+      </ThemeProvider>
     ),
   ],
 };

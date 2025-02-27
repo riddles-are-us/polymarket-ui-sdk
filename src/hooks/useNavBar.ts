@@ -6,27 +6,23 @@ export interface UseNavBarProps {
     label: string;
     href: string;
   }>;
-  position?: 'top' | 'bottom';
+  position?: "top" | "bottom";
 }
 
-export const useNavBar = ({
-  items,
-  position = 'top'
-}: UseNavBarProps = { items: [] }) => {
+export const useNavBar = ({ items, position = "top" }: UseNavBarProps = { items: [] }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [activeItem, setActiveItem] = useState<string>(items[0]?.href || '');
+  const [activeItem, setActiveItem] = useState<string>(items[0]?.href || "");
 
-  // 检测屏幕大小变化
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsSmallScreen(window.innerWidth < 768); // 768px 作为断点
+      setIsSmallScreen(window.innerWidth < 768);
     };
 
     checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
+    window.addEventListener("resize", checkScreenSize);
 
     return () => {
-      window.removeEventListener('resize', checkScreenSize);
+      window.removeEventListener("resize", checkScreenSize);
     };
   }, []);
 
@@ -39,6 +35,6 @@ export const useNavBar = ({
     position,
     isSmallScreen,
     activeItem,
-    handleItemClick
+    handleItemClick,
   };
-}; 
+};

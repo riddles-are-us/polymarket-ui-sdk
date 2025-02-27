@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { NavbarUI } from "../src/components/Navbar";
+import React from "react";
 
 const meta: Meta<typeof NavbarUI> = {
   title: "Components/Navbar",
@@ -23,6 +24,11 @@ export const Default: Story = {
       userName: "John Doe",
       onProfileClick: () => console.log("Profile clicked"),
     },
+    darkMode: {
+      enabled: true,
+      onToggle: () => {},
+    },
+    onNavigate: (path) => console.log("Navigate to:", path),
   },
 };
 
@@ -36,6 +42,11 @@ export const LoggedOut: Story = {
       onLogin: () => console.log("Login clicked"),
       onSignUp: () => console.log("Sign up clicked"),
     },
+    darkMode: {
+      enabled: true,
+      onToggle: () => {},
+    },
+    onNavigate: (path) => console.log("Navigate to:", path),
   },
 };
 
@@ -45,6 +56,16 @@ export const WithSearch: Story = {
     search: {
       placeholder: "Search...",
       onSearch: (query) => console.log("Search:", query),
+    },
+  },
+};
+
+export const LightMode: Story = {
+  args: {
+    ...Default.args,
+    darkMode: {
+      enabled: false,
+      onToggle: () => {},
     },
   },
 };
