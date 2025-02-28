@@ -1,7 +1,7 @@
 import React from "react";
 import { NavbarUI } from "./Navbar.ui";
 import { useNavbar } from "./Navbar.script";
-import { Squares2X2Icon, ChartBarIcon, BellIcon, TrophyIcon } from "@heroicons/react/24/outline";
+import { Squares2X2Icon, ChartBarIcon, BellIcon, TrophyIcon, StarIcon } from "@heroicons/react/24/outline";
 import { useThemeContext } from "../../contexts/ThemeContext";
 
 export const NavbarWidget: React.FC = () => {
@@ -19,7 +19,7 @@ export const NavbarWidget: React.FC = () => {
     },
     {
       ...baseMenuItems[2],
-      icon: TrophyIcon,
+      icon: StarIcon,
     },
     {
       ...baseMenuItems[3],

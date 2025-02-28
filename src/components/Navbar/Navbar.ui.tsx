@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
-  HomeIcon,
   Squares2X2Icon,
   MagnifyingGlassIcon as SearchIcon,
   BellIcon,
-  Bars3Icon as MenuIcon,
   UserCircleIcon,
   ChartBarIcon,
   TrophyIcon,
+  StarIcon,
 } from "@heroicons/react/24/outline";
 import { NavigationBottomUI, NavigationItem } from "./components/NavigationBottom";
 import { SettingsDropdown } from "./components/SettingsDropdown";
@@ -47,11 +46,37 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
   className = "",
 }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showDesktopNav, setShowDesktopNav] = useState(true);
+  const navRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!navRef.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const containerWidth = entry.contentRect.width;
+        const navElement = entry.target as HTMLElement;
+        const logoWidth = navElement.querySelector('[data-testid="logo"]')?.clientWidth || 0;
+        const searchWidth = navElement.querySelector('[data-testid="search"]')?.clientWidth || 0;
+        const authWidth = navElement.querySelector('[data-testid="auth"]')?.clientWidth || 0;
+        const availableWidth = containerWidth - logoWidth - searchWidth - authWidth - 48;
+
+        const menuContainer = navElement.querySelector('[data-testid="menu-container"]') as HTMLElement;
+        if (menuContainer) {
+          const shouldShowDesktop = availableWidth >= menuContainer.scrollWidth;
+          setShowDesktopNav(shouldShowDesktop);
+        }
+      }
+    });
+
+    observer.observe(navRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const defaultMenuItems: NavigationItem[] = [
     { label: "Markets", icon: Squares2X2Icon },
     { label: "Dashboards", icon: ChartBarIcon },
-    { label: "Sports", icon: TrophyIcon },
+    { label: "Sports", icon: StarIcon },
     { label: "Activity", icon: BellIcon },
     { label: "Ranks", icon: TrophyIcon },
   ];
@@ -59,13 +84,20 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
   const combinedMenuItems = menuItems.length > 0 ? menuItems : defaultMenuItems;
 
   return (
-    <div className={`flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-white ${className}`}>
-      <nav className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-3 border-b border-gray-200 dark:border-gray-800">
-        <div className="container mx-auto flex items-center justify-between">
+    <div className={`flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-white w-full ${className}`}>
+      <nav
+        ref={navRef}
+        className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-3 border-b border-gray-200 dark:border-gray-800 w-full"
+      >
+        <div className="w-full flex items-center justify-between">
           {/* Left section: Logo and Navigation */}
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center space-x-4 lg:space-x-8 flex-shrink-0">
             {/* Logo */}
-            <div className="text-xl font-bold cursor-pointer flex items-center space-x-2" onClick={logo.onClick}>
+            <div
+              data-testid="logo"
+              className="text-xl font-bold cursor-pointer flex items-center space-x-2"
+              onClick={logo.onClick}
+            >
               <svg className="h-8 w-8 text-blue-600 dark:text-blue-500" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2L2 19h20L12 2zm0 3l7.5 13h-15L12 5z" />
               </svg>
@@ -73,7 +105,10 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-6">
+            <div
+              data-testid="menu-container"
+              className={`hidden ${showDesktopNav ? "md:flex" : ""} items-center gap-2 lg:gap-4`}
+            >
               {combinedMenuItems.map((item, index) => {
                 const Icon = item.icon;
                 if (!Icon) return null;
@@ -82,10 +117,10 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
                   <button
                     key={index}
                     onClick={item.onClick}
-                    className="flex items-center space-x-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3 py-1"
+                    className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white py-1 px-2 text-sm whitespace-nowrap min-w-0"
                   >
-                    <Icon className="h-5 w-5" />
-                    <span>{item.label}</span>
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    <span className="truncate">{item.label}</span>
                   </button>
                 );
               })}
@@ -93,7 +128,7 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
           </div>
 
           {/* Center: Search */}
-          <div className="flex-1 max-w-3xl mx-8">
+          <div data-testid="search" className="flex-1 max-w-2xl mx-2 lg:mx-4">
             {search && (
               <div className="relative">
                 <SearchIcon className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
@@ -110,14 +145,14 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
           </div>
 
           {/* Right section: Auth */}
-          <div className="flex items-center space-x-3">
+          <div data-testid="auth" className="flex items-center space-x-3">
             {auth &&
               (!auth.isLoggedIn ? (
                 <div className="flex items-center space-x-3">
                   {auth.onLogin && (
                     <button
                       onClick={auth.onLogin}
-                      className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm hidden sm:block"
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm hidden sm:block w-20"
                     >
                       Log In
                     </button>
@@ -125,7 +160,7 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
                   {auth.onSignUp && (
                     <button
                       onClick={auth.onSignUp}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-full text-sm font-medium"
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-full text-sm font-medium w-24"
                     >
                       Sign Up
                     </button>
@@ -146,8 +181,8 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
       </nav>
 
       {/* Categories Bar */}
-      <div className="bg-white dark:bg-gray-900 text-sm border-b border-gray-200 dark:border-gray-800 overflow-x-auto">
-        <div className="container mx-auto px-4">
+      <div className="bg-white dark:bg-gray-900 text-sm border-b border-gray-200 dark:border-gray-800 overflow-x-auto w-full">
+        <div className="w-full px-4">
           <div className="flex items-center space-x-6 py-2">
             <span className="text-red-500 font-medium whitespace-nowrap">LIVE</span>
             <span className="text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer whitespace-nowrap">
@@ -191,7 +226,7 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
       </div>
 
       {/* Mobile Search - Only visible when search is open */}
-      <div className={`md:hidden bg-white dark:bg-gray-900 p-4 ${isSearchOpen ? "block" : "hidden"}`}>
+      <div className={`md:hidden bg-white dark:bg-gray-900 p-4 w-full ${isSearchOpen ? "block" : "hidden"}`}>
         {search && (
           <div className="relative">
             <SearchIcon className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
@@ -208,7 +243,11 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <NavigationBottomUI items={combinedMenuItems} onSearchClick={() => setIsSearchOpen(!isSearchOpen)} />
+      <NavigationBottomUI
+        items={combinedMenuItems}
+        onSearchClick={() => setIsSearchOpen(!isSearchOpen)}
+        className={showDesktopNav ? "md:hidden" : ""}
+      />
     </div>
   );
 };
