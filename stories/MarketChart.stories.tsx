@@ -30,7 +30,7 @@ export const Default: Story = {
     title: "Will Trump Win in 2024?",
     subtitle: "Presidential Election Market",
     mainValue: "64",
-    mainValueUnit: "¢",
+    mainValueUnit: "$",
     changeValue: 2.5,
     chartData: mockChartData,
     actions: {

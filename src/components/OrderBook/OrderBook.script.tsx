@@ -36,7 +36,7 @@ export const useOrderBook = () => {
       spread,
     },
     config: {
-      priceUnit: "¢",
+      priceUnit: "$",
       quantityLabel: "Shares",
       totalLabel: "Total",
       askColor: "text-red-500",

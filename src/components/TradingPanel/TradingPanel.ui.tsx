@@ -26,7 +26,7 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
   selectedTab,
   amount,
   maxAmount,
-  priceUnit = "¢",
+  priceUnit = "$",
   quickAmounts = [1, 20, 100, "Max"],
   config = {
     buyButtonText: "Buy Yes",
@@ -45,26 +45,26 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
     <div className={`bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm ${className}`}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
-        <button
+          <button
             onClick={() => onTabChange("buy")}
             className={`px-4 py-2 rounded-md font-medium ${
               selectedTab === "buy"
                 ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300"
                 : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-          }`}
-        >
-          Buy
-        </button>
-        <button
+            }`}
+          >
+            Buy
+          </button>
+          <button
             onClick={() => onTabChange("sell")}
             className={`px-4 py-2 rounded-md font-medium ${
               selectedTab === "sell"
                 ? "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300"
                 : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-          }`}
-        >
-          Sell
-        </button>
+            }`}
+          >
+            Sell
+          </button>
         </div>
         <div className="text-gray-900 dark:text-white font-medium">
           {currentPrice}
@@ -84,30 +84,30 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
                      focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter amount..."
           />
-      </div>
+        </div>
 
         <div className="flex space-x-2">
           {quickAmounts.map((quickAmount, index) => (
-          <button
-            key={index}
+            <button
+              key={index}
               onClick={() => onQuickAmountClick(quickAmount)}
               className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
                        rounded-md text-gray-700 dark:text-gray-300 
                        hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
+            >
               {quickAmount}
-          </button>
-        ))}
-      </div>
+            </button>
+          ))}
+        </div>
 
-      <button
-        onClick={onSubmit}
+        <button
+          onClick={onSubmit}
           className={`w-full py-2 px-4 rounded-md text-white font-medium ${
-          selectedTab === "buy" ? config.buyButtonColor : config.sellButtonColor
+            selectedTab === "buy" ? config.buyButtonColor : config.sellButtonColor
           }`}
-      >
-        {selectedTab === "buy" ? config.buyButtonText : config.sellButtonText}
-      </button>
+        >
+          {selectedTab === "buy" ? config.buyButtonText : config.sellButtonText}
+        </button>
 
         <p className="text-sm text-gray-500 dark:text-gray-400 text-center">{config.disclaimer}</p>
       </div>

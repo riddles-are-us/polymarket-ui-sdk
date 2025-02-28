@@ -31,7 +31,7 @@ export const OrderBookUI: React.FC<OrderBookUIProps> = ({
   bids,
   summary,
   config = {
-    priceUnit: "¢",
+    priceUnit: "$",
     quantityLabel: "Shares",
     totalLabel: "Total",
     askColor: "text-red-500",

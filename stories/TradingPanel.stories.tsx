@@ -30,7 +30,7 @@ export const Default: Story = {
     selectedTab: "buy",
     amount: "",
     maxAmount: 1000,
-    priceUnit: "¢",
+    priceUnit: "$",
     quickAmounts: [10, 50, 100, "Max"],
     config: {
       buyButtonText: "Buy Yes",

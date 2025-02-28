@@ -29,7 +29,7 @@ export const MarketChartUI: React.FC<MarketChartUIProps> = ({
   title,
   subtitle,
   mainValue,
-  mainValueUnit = "¢",
+  mainValueUnit = "$",
   changeValue,
   chartData,
   timeRanges = ["1H", "6H", "1D", "1W", "1M", "ALL"],
