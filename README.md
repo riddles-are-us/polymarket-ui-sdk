@@ -1,6 +1,22 @@
 # Polymarket UI SDK
 
-A React component library for building Polymarket-like prediction market interfaces.
+A comprehensive React component library for building decentralized prediction market interfaces, designed specifically for Polymarket applications.
+
+## Features
+
+- 📊 Market Components
+  - Market Page Layout
+  - Trading Panel
+  - Order Book
+  - Market Charts
+  - Comments Section
+- 🎨 UI Components
+  - Responsive Navbar
+  - Dark Mode Support
+  - Tailwind CSS Integration
+- 📱 Responsive Design
+- 🌙 Dark Mode Support
+- 📚 Storybook Documentation
 
 ## Installation
 
@@ -8,133 +24,141 @@ A React component library for building Polymarket-like prediction market interfa
 npm install polymarket-ui-sdk
 ```
 
-## Usage
+## Requirements
 
-This SDK provides several components that can be used to build a prediction market interface:
+- React ^19.0.0
+- React DOM ^19.0.0
+- Node.js (Latest LTS version recommended)
 
-### MarketPage
+## Quick Start
 
-The main component that combines all other components into a complete market page:
-
-```tsx
-import { MarketPage } from 'polymarket-ui-sdk';
+```jsx
+import { MarketPage, TradingPanel, OrderBook } from "polymarket-ui-sdk";
 
 function App() {
   return (
-    <MarketPage
-      marketData={{
-        title: 'Will Kanye launch a coin in February?',
-        volume: '$23,699,480',
-        endDate: 'Feb 28, 2025',
-        currentPrice: 23,
-        priceChange: 1.2,
-        chartData: [...],
-      }}
-      orderBook={{
-        asks: [...],
-        bids: [...],
-        lastPrice: 21,
-        spread: 1,
-      }}
-      comments={[...]}
-      totalComments={10448}
-    />
+    <MarketPage>
+      <TradingPanel />
+      <OrderBook />
+    </MarketPage>
   );
 }
 ```
 
-### Individual Components
+## Dark Mode
 
-You can also use individual components:
+The SDK comes with built-in dark mode support using Tailwind CSS. To use dark mode in your application:
 
-#### Navbar
+1. Wrap your application with the `ThemeProvider`:
 
-```tsx
-import { Navbar } from "polymarket-ui-sdk";
+```jsx
+import { ThemeProvider } from "polymarket-ui-sdk";
 
-<Navbar
-  onSearch={(query) => console.log(query)}
-  onLogin={() => console.log("Login")}
-  onSignUp={() => console.log("Sign up")}
-  isLoggedIn={false}
-/>;
+function App() {
+  return (
+    <ThemeProvider>
+      <YourApp />
+    </ThemeProvider>
+  );
+}
 ```
 
-#### MarketChart
+2. Use the dark mode hook in your components:
 
-```tsx
-import { MarketChart } from 'polymarket-ui-sdk';
+```jsx
+import { useDarkMode } from "polymarket-ui-sdk";
 
-<MarketChart
-  data={{
-    title: 'Market Title',
-    volume: '$1,000,000',
-    endDate: '2025-02-28',
-    currentPrice: 50,
-    priceChange: 2.5,
-    chartData: [...],
-  }}
-  onBookmark={() => {}}
-  onShare={() => {}}
-  onCopy={() => {}}
-/>
+function Component() {
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
+  return (
+    <div>
+      <button onClick={toggleDarkMode}>{isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}</button>
+    </div>
+  );
+}
 ```
 
-#### TradingPanel
+The dark mode state is automatically persisted in localStorage and applies the appropriate Tailwind CSS classes (`dark:`) to your components.
 
-```tsx
-import { TradingPanel } from "polymarket-ui-sdk";
+## Available Components
 
-<TradingPanel currentPrice={50} onTrade={(type, amount) => console.log(type, amount)} maxAmount={1000} />;
-```
+### MarketPage
 
-#### OrderBook
+The main container component for displaying prediction market information.
 
-```tsx
-import { OrderBook } from 'polymarket-ui-sdk';
+### TradingPanel
 
-<OrderBook
-  asks={[...]}
-  bids={[...]}
-  lastPrice={50}
-  spread={1}
-  onOrderClick={(order, type) => console.log(order, type)}
-/>
-```
+Interactive component for executing trades and managing positions.
 
-#### Comments
+### OrderBook
 
-```tsx
-import { Comments } from 'polymarket-ui-sdk';
+Real-time display of market orders and trading activity.
 
-<Comments
-  comments={[...]}
-  totalComments={100}
-  onAddComment={(content) => console.log(content)}
-  onLikeComment={(id) => console.log(id)}
-/>
-```
+### MarketChart
+
+Price history and market trend visualization component.
+
+### Comments
+
+Community discussion and market sentiment component.
+
+### Navbar
+
+Customizable navigation component with built-in dark mode toggle.
 
 ## Development
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start Storybook:
-   ```bash
-   npm run storybook
-   ```
-4. Build the package:
-   ```bash
-   npm run build
-   ```
+### Setup
+
+```bash
+# Clone the repository
+git clone
+
+# Install dependencies
+npm install
+
+# Start Storybook development server
+npm run storybook
+```
+
+### Scripts
+
+- `npm run dev` - Start development server (No page demo yet)
+- `npm run build` - Build for production
+- `npm run storybook` - Start Storybook development environment
+- `npm run build-storybook` - Build Storybook for deployment
+
+## Storybook
+
+We use Storybook for component development and documentation. To view the component library:
+
+1. Run `npm run storybook`
+2. Open `http://localhost:6006` in your browser
+
+## Technologies
+
+- React
+- TypeScript
+- Tailwind CSS
+- Storybook
+- Vite
+- Rollup
+- Recharts (for charts)
+- React Router DOM
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-ISC
+ISC License
+
+## Support
+
+For support, please open an issue in the GitHub repository or contact the maintainers.
