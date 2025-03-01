@@ -30,6 +30,7 @@ const mockMarketData = {
   mainValue: "75",
   changeValue: 2.5,
   chartData: generateMockChartData(30),
+  logo: "https://example.com/sample-logo.png",
 };
 
 export const useMarketChart = () => {

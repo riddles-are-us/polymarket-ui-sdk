@@ -57,9 +57,8 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
         const containerWidth = entry.contentRect.width;
         const navElement = entry.target as HTMLElement;
         const logoWidth = navElement.querySelector('[data-testid="logo"]')?.clientWidth || 0;
-        const searchWidth = navElement.querySelector('[data-testid="search"]')?.clientWidth || 0;
         const authWidth = navElement.querySelector('[data-testid="auth"]')?.clientWidth || 0;
-        const availableWidth = containerWidth - logoWidth - searchWidth - authWidth - 48;
+        const availableWidth = containerWidth - logoWidth - authWidth - 48;
 
         const menuContainer = navElement.querySelector('[data-testid="menu-container"]') as HTMLElement;
         if (menuContainer) {
@@ -127,8 +126,8 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
             </div>
           </div>
 
-          {/* Center: Search */}
-          <div data-testid="search" className="flex-1 max-w-2xl mx-2 lg:mx-4">
+          {/* Center: Search - 只在大屏幕上显示，完全不影响小屏幕布局 */}
+          <div data-testid="search" className="hidden lg:block lg:flex-1 lg:max-w-2xl lg:mx-4">
             {search && (
               <div className="relative">
                 <SearchIcon className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
@@ -181,7 +180,13 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
       </nav>
 
       {/* Categories Bar */}
-      <div className="bg-white dark:bg-gray-900 text-sm border-b border-gray-200 dark:border-gray-800 overflow-x-auto w-full">
+      <div 
+        className="bg-white dark:bg-gray-900 text-sm border-b border-gray-200 dark:border-gray-800 overflow-x-auto w-full"
+        style={{ 
+          msOverflowStyle: 'none', /* IE and Edge */
+          scrollbarWidth: 'none', /* Firefox */
+        }}
+      >
         <div className="w-full px-4">
           <div className="flex items-center space-x-6 py-2">
             <span className="text-red-500 font-medium whitespace-nowrap">LIVE</span>

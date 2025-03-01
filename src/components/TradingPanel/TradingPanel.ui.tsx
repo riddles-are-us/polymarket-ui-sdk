@@ -90,7 +90,13 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
           {quickAmounts.map((quickAmount, index) => (
             <button
               key={index}
-              onClick={() => onQuickAmountClick(quickAmount)}
+              onClick={() => {
+                if (quickAmount === "Max") {
+                  onQuickAmountClick(maxAmount);
+                } else {
+                  onQuickAmountClick(quickAmount);
+                }
+              }}
               className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
                        rounded-md text-gray-700 dark:text-gray-300 
                        hover:bg-gray-100 dark:hover:bg-gray-700"
