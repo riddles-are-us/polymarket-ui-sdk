@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { NavigationBottomUI, NavigationItem } from "./components/NavigationBottom";
 import { SettingsDropdown } from "./components/SettingsDropdown";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 export interface NavbarUIProps {
   logo: {
@@ -48,6 +49,7 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showDesktopNav, setShowDesktopNav] = useState(true);
   const navRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMediaQuery("(max-width: 1024px)");
 
   useEffect(() => {
     if (!navRef.current) return;
@@ -180,11 +182,11 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
       </nav>
 
       {/* Categories Bar */}
-      <div 
+      <div
         className="bg-white dark:bg-gray-900 text-sm border-b border-gray-200 dark:border-gray-800 overflow-x-auto w-full"
-        style={{ 
-          msOverflowStyle: 'none', /* IE and Edge */
-          scrollbarWidth: 'none', /* Firefox */
+        style={{
+          msOverflowStyle: "none" /* IE and Edge */,
+          scrollbarWidth: "none" /* Firefox */,
         }}
       >
         <div className="w-full px-4">
@@ -251,7 +253,7 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
       <NavigationBottomUI
         items={combinedMenuItems}
         onSearchClick={() => setIsSearchOpen(!isSearchOpen)}
-        className={showDesktopNav ? "md:hidden" : ""}
+        className={`${showDesktopNav ? "md:hidden" : ""} ${isMobile ? "z-10 pb-safe" : ""}`}
       />
     </div>
   );

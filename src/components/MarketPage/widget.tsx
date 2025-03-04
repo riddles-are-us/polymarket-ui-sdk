@@ -1,31 +1,14 @@
 import React from "react";
 import { MarketPageUI } from "./MarketPage.ui";
-import { useMarketPage } from "./MarketPage.script";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 export interface MarketPageWidgetProps {
   marketId: string;
+  className?: string;
 }
 
-export const MarketPageWidget: React.FC<MarketPageWidgetProps> = ({ marketId }) => {
-  const { marketData, isLoading, error } = useMarketPage(marketId);
+export const MarketPageWidget: React.FC<MarketPageWidgetProps> = ({ marketId, className }) => {
+  const isMobile = useMediaQuery("(max-width: 1024px)");
 
-  if (isLoading) {
-    return <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">Loading...</div>;
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center text-red-500">
-        {error}
-      </div>
-    );
-  }
-
-  if (!marketData) {
-    return (
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">Market not found</div>
-    );
-  }
-
-  return <MarketPageUI marketId={marketId} />;
+  return <MarketPageUI marketId={marketId} className={className} />;
 };

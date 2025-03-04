@@ -1,5 +1,5 @@
-import React from "react";
-import { ChevronUpIcon, ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import React, { useState, useEffect } from "react";
+import { ChevronUpIcon, ChevronDownIcon, ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 export interface TradingPanelUIProps {
   currentPrice: number;
@@ -30,6 +30,7 @@ export interface TradingPanelUIProps {
   className?: string;
   isMoreMenuOpen: boolean;
   setIsMoreMenuOpen: (isOpen: boolean) => void;
+  isMobileView?: boolean;
 }
 
 export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
@@ -61,13 +62,76 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
   className = "",
   isMoreMenuOpen,
   setIsMoreMenuOpen,
+  isMobileView = false,
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isPanelVisible, setIsPanelVisible] = useState(false);
   const yesPrice = `${currentPrice}$`;
   const noPrice = `${100 - currentPrice}$`;
 
-  return (
-    <div className={`bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm w-[320px] ${className}`}>
-      <div className="flex items-center justify-between mb-4">
+  useEffect(() => {
+    if (isExpanded && isMobileView) {
+      setIsPanelVisible(true);
+    } else if (!isExpanded && isMobileView) {
+      // 延迟隐藏面板，等待动画完成
+      const timer = setTimeout(() => {
+        setIsPanelVisible(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isExpanded, isMobileView]);
+
+  if (isMobileView && !isExpanded) {
+    return (
+      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-lg border-t border-gray-200 dark:border-gray-700 p-2 z-50 mb-[60px]">
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            onClick={() => {
+              onOptionChange("yes");
+              setIsExpanded(true);
+            }}
+            className="p-2 rounded-lg bg-green-500 text-white"
+          >
+            <div className="flex flex-col items-center">
+              <span className="text-base font-medium">Buy Yes</span>
+              <span className="text-xs">{yesPrice}</span>
+            </div>
+          </button>
+          <button
+            onClick={() => {
+              onOptionChange("no");
+              setIsExpanded(true);
+            }}
+            className="p-2 rounded-lg bg-red-500 text-white"
+          >
+            <div className="flex flex-col items-center">
+              <span className="text-base font-medium">Buy No</span>
+              <span className="text-xs">{noPrice}</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const mainPanel = (
+    <div
+      className={`bg-white dark:bg-gray-800 rounded-t-lg shadow-lg ${
+        isMobileView
+          ? "w-full fixed bottom-0 left-0 right-0 z-50 p-3 max-h-[90vh] overflow-y-auto transition-transform duration-10000 ease-in-out " +
+            (isPanelVisible ? "transform translate-y-0" : "transform translate-y-full")
+          : "w-[320px] p-6 rounded-lg"
+      } ${className}`}
+    >
+      {isMobileView && (
+        <button
+          onClick={() => setIsExpanded(false)}
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+        >
+          <XMarkIcon className="w-5 h-5" />
+        </button>
+      )}
+      <div className="flex items-center justify-between mb-4 mt-6">
         <div className="flex space-x-4">
           <button
             onClick={() => onTabChange("buy")}
@@ -91,28 +155,20 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
           </button>
         </div>
         <div className="relative">
-          <button
-            onClick={() => {
-              if (isDropdownOpen) {
-                setIsDropdownOpen(false);
-                setIsMoreMenuOpen(false);
-              } else {
-                onTradeTypeChange(tradeType === "market" ? "limit" : "market");
-              }
-            }}
-            onMouseEnter={() => setIsDropdownOpen(true)}
-            className="text-sm text-gray-900 dark:text-white flex items-center gap-1"
-          >
-            {tradeType === "market" ? "Market" : "Limit"}
-            <ChevronDownIcon 
-              className={`w-4 h-4 transform transition-transform duration-200 ${
-                isDropdownOpen ? 'rotate-180' : ''
-              }`}
-            />
-          </button>
-          
+          <div className="flex items-center">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="text-sm text-gray-900 dark:text-white flex items-center gap-1"
+            >
+              {tradeType === "market" ? "Market" : "Limit"}
+              <ChevronDownIcon
+                className={`w-4 h-4 transform transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+          </div>
+
           {isDropdownOpen && (
-            <div 
+            <div
               className="absolute right-0 mt-1 py-1 w-32 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700"
               onMouseLeave={() => {
                 setIsDropdownOpen(false);
@@ -120,14 +176,28 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
               }}
             >
               <button
-                onClick={() => onTradeTypeChange("market")}
-                className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => {
+                  onTradeTypeChange("market");
+                  setIsDropdownOpen(false);
+                }}
+                className={`block w-full text-left px-4 py-1 text-sm ${
+                  tradeType === "market"
+                    ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
               >
                 Market
               </button>
               <button
-                onClick={() => onTradeTypeChange("limit")}
-                className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => {
+                  onTradeTypeChange("limit");
+                  setIsDropdownOpen(false);
+                }}
+                className={`block w-full text-left px-4 py-1 text-sm ${
+                  tradeType === "limit"
+                    ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
               >
                 Limit
               </button>
@@ -140,9 +210,9 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
                   More
                   <ChevronRightIcon className="w-4 h-4 text-gray-500" />
                 </button>
-                
+
                 {isMoreMenuOpen && (
-                  <div 
+                  <div
                     className="absolute left-full top-0 mt-0 ml-0 py-1 w-32 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700"
                     onMouseLeave={() => setIsMoreMenuOpen(false)}
                   >
@@ -198,11 +268,9 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
       {tradeType === "limit" && (
         <div className="mb-4">
           <div className="flex items-center gap-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 w-[80px]">
-              Limit Price
-            </label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 w-[80px]">Limit Price</label>
             <div className="flex items-center w-[180px]">
-              <button 
+              <button
                 className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-600"
                 onClick={() => onLimitPriceChange((Number(limitPrice) - 1).toString())}
               >
@@ -216,7 +284,7 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
                          text-gray-900 dark:text-white bg-white dark:bg-gray-700
                          focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <button 
+              <button
                 className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-r-md border border-l-0 border-gray-300 dark:border-gray-600"
                 onClick={() => onLimitPriceChange((Number(limitPrice) + 1).toString())}
               >
@@ -244,59 +312,57 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
         </div>
 
         <div className="flex justify-end space-x-2 ">
-          {tradeType === "limit" && selectedTab === "buy" ? (
-            ["-10", "+10"].map((adjustment, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  const value = parseInt(adjustment);
-                  onQuickAmountClick(value);
-                }}
-                className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
+          {tradeType === "limit" && selectedTab === "buy"
+            ? ["-10", "+10"].map((adjustment, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    const value = parseInt(adjustment);
+                    onQuickAmountClick(value);
+                  }}
+                  className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
                          rounded-md text-gray-700 dark:text-gray-300 
                          hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                {adjustment}
-              </button>
-            ))
-          ) : selectedTab === "sell" ? (
-            ["25%", "50%", "Max"].map((percentage, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  if (percentage === "Max") {
-                    onQuickAmountClick(maxAmount);
-                  } else {
-                    const percent = parseInt(percentage) / 100;
-                    onQuickAmountClick(Math.floor(maxAmount * percent));
-                  }
-                }}
-                className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
+                >
+                  {adjustment}
+                </button>
+              ))
+            : selectedTab === "sell"
+            ? ["25%", "50%", "Max"].map((percentage, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    if (percentage === "Max") {
+                      onQuickAmountClick(maxAmount);
+                    } else {
+                      const percent = parseInt(percentage) / 100;
+                      onQuickAmountClick(Math.floor(maxAmount * percent));
+                    }
+                  }}
+                  className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
                          rounded-md text-gray-700 dark:text-gray-300 
                          hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                {percentage}
-              </button>
-            ))
-          ) : (
-            quickAmounts.map((quickAmount, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  if (quickAmount === "Max") {
-                    onQuickAmountClick(maxAmount);
-                  } else {
-                    onQuickAmountClick(Number(quickAmount));
-                  }
-                }}
-                className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
+                >
+                  {percentage}
+                </button>
+              ))
+            : quickAmounts.map((quickAmount, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    if (quickAmount === "Max") {
+                      onQuickAmountClick(maxAmount);
+                    } else {
+                      onQuickAmountClick(Number(quickAmount));
+                    }
+                  }}
+                  className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
                          rounded-md text-gray-700 dark:text-gray-300 
                          hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                {quickAmount === "Max" ? "Max" : `+${priceUnit}${quickAmount}`}
-              </button>
-            ))
-          )}
+                >
+                  {quickAmount === "Max" ? "Max" : `+${priceUnit}${quickAmount}`}
+                </button>
+              ))}
         </div>
 
         <button
@@ -310,4 +376,10 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
       </div>
     </div>
   );
+
+  if (isMobileView && isExpanded) {
+    return <div className="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex items-end">{mainPanel}</div>;
+  }
+
+  return mainPanel;
 };

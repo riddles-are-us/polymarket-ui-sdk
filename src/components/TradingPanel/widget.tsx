@@ -5,9 +5,14 @@ import { useTradingPanel } from "./TradingPanel.script";
 export interface TradingPanelWidgetProps {
   currentPrice: number;
   maxAmount?: number;
+  isMobileView?: boolean;
 }
 
-export const TradingPanelWidget: React.FC<TradingPanelWidgetProps> = ({ currentPrice, maxAmount }) => {
+export const TradingPanelWidget: React.FC<TradingPanelWidgetProps> = ({
+  currentPrice,
+  maxAmount,
+  isMobileView = false,
+}) => {
   const tradingPanelProps = useTradingPanel(currentPrice, maxAmount);
-  return <TradingPanelUI {...tradingPanelProps} />;
+  return <TradingPanelUI {...tradingPanelProps} isMobileView={isMobileView} />;
 };

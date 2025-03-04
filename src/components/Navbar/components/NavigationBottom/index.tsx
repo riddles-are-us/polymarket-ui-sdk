@@ -26,7 +26,8 @@ export const NavigationBottomUI: React.FC<NavigationBottomUIProps> = ({ items, o
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-t border-gray-200 dark:border-gray-800 w-full ${className}`}
+      className={`fixed bottom-0 left-0 right-0 z-10 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-t border-gray-200 dark:border-gray-800 w-full ${className}`}
+      style={{ height: "auto" }}
     >
       <div className="w-full grid grid-cols-5 px-4 py-1">
         {navigationItems.map((item, index) => {
