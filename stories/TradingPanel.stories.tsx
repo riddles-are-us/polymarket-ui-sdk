@@ -26,23 +26,30 @@ type Story = StoryObj<typeof TradingPanelUI>;
 
 export const Default: Story = {
   args: {
-    currentPrice: 64,
+    currentPrice: 21,
     selectedTab: "buy",
+    selectedOption: "yes",
+    tradeType: "market",
+    limitPrice: "21",
     amount: "",
     maxAmount: 1000,
+    isDropdownOpen: false,
     priceUnit: "$",
     quickAmounts: [10, 50, 100, "Max"],
     config: {
-      buyButtonText: "Buy Yes",
-      sellButtonText: "Buy No",
-      buyButtonColor: "bg-green-600 hover:bg-green-700",
-      sellButtonColor: "bg-red-600 hover:bg-red-700",
+      buyButtonText: "Buy",
+      sellButtonText: "Sell",
+      buyButtonColor: "bg-blue-500 hover:bg-blue-600",
+      sellButtonColor: "bg-blue-500 hover:bg-blue-600",
       disclaimer: "By trading, you agree to the Terms of Use",
     },
     onTabChange: (tab) => console.log("Tab changed:", tab),
+    onOptionChange: (option) => console.log("Option changed:", option),
     onAmountChange: (amount) => console.log("Amount changed:", amount),
     onQuickAmountClick: (amount) => console.log("Quick amount clicked:", amount),
     onSubmit: () => console.log("Submit clicked"),
+    isMoreMenuOpen: false,
+    setIsMoreMenuOpen: () => console.log("More menu toggled"),
   },
 };
 
@@ -71,4 +78,11 @@ export const WithWidget: Story = {
     ...Default.args,
   },
   render: () => <TradingPanelWidget currentPrice={75} maxAmount={1000} />,
+};
+
+export const LimitOrder: Story = {
+  args: {
+    ...Default.args,
+    tradeType: "limit",
+  },
 };
