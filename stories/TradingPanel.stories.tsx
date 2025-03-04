@@ -29,8 +29,11 @@ export const Default: Story = {
     currentPrice: 21,
     selectedTab: "buy",
     selectedOption: "yes",
+    tradeType: "market",
+    limitPrice: "21",
     amount: "",
     maxAmount: 1000,
+    isDropdownOpen: false,
     priceUnit: "$",
     quickAmounts: [10, 50, 100, "Max"],
     config: {
@@ -45,6 +48,8 @@ export const Default: Story = {
     onAmountChange: (amount) => console.log("Amount changed:", amount),
     onQuickAmountClick: (amount) => console.log("Quick amount clicked:", amount),
     onSubmit: () => console.log("Submit clicked"),
+    isMoreMenuOpen: false,
+    setIsMoreMenuOpen: () => console.log("More menu toggled"),
   },
 };
 
@@ -73,4 +78,11 @@ export const WithWidget: Story = {
     ...Default.args,
   },
   render: () => <TradingPanelWidget currentPrice={75} maxAmount={1000} />,
+};
+
+export const LimitOrder: Story = {
+  args: {
+    ...Default.args,
+    tradeType: "limit",
+  },
 };

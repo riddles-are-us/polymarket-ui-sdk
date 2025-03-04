@@ -4,8 +4,11 @@ export interface TradingPanelUIProps {
   currentPrice: number;
   selectedTab: "buy" | "sell";
   selectedOption: "yes" | "no";
+  tradeType: "market" | "limit";
+  limitPrice: string;
   amount: string;
   maxAmount: number;
+  isDropdownOpen: boolean;
   priceUnit?: string;
   quickAmounts?: Array<number | "Max">;
   config?: {
@@ -17,18 +20,26 @@ export interface TradingPanelUIProps {
   };
   onTabChange: (tab: "buy" | "sell") => void;
   onOptionChange: (option: "yes" | "no") => void;
+  onTradeTypeChange: (type: "market" | "limit") => void;
+  onLimitPriceChange: (price: string) => void;
+  setIsDropdownOpen: (isOpen: boolean) => void;
   onAmountChange: (amount: string) => void;
   onQuickAmountClick: (amount: number) => void;
   onSubmit: () => void;
   className?: string;
+  isMoreMenuOpen: boolean;
+  setIsMoreMenuOpen: (isOpen: boolean) => void;
 }
 
 export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
   currentPrice,
   selectedTab,
   selectedOption,
+  tradeType,
+  limitPrice,
   amount,
   maxAmount,
+  isDropdownOpen,
   priceUnit = "$",
   quickAmounts = [1, 20, 100, "Max"],
   config = {
@@ -40,10 +51,15 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
   },
   onTabChange,
   onOptionChange,
+  onTradeTypeChange,
+  onLimitPriceChange,
+  setIsDropdownOpen,
   onAmountChange,
   onQuickAmountClick,
   onSubmit,
   className = "",
+  isMoreMenuOpen,
+  setIsMoreMenuOpen,
 }) => {
   const yesPrice = `${currentPrice}$`;
   const noPrice = `${100 - currentPrice}$`;
@@ -73,7 +89,75 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
             Sell
           </button>
         </div>
-        <div className="text-sm text-gray-500">Market ▼</div>
+        <div className="relative">
+          <button
+            onClick={() => {
+              if (isDropdownOpen) {
+                setIsDropdownOpen(false);
+                setIsMoreMenuOpen(false);
+              } else {
+                onTradeTypeChange(tradeType === "market" ? "limit" : "market");
+              }
+            }}
+            onMouseEnter={() => setIsDropdownOpen(true)}
+            className="text-sm text-gray-900 dark:text-white flex items-center gap-1"
+          >
+            {tradeType === "market" ? "Market" : "Limit"} {isDropdownOpen ? "^" : "v"}
+          </button>
+          
+          {isDropdownOpen && (
+            <div 
+              className="absolute right-0 mt-1 py-1 w-32 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700"
+              onMouseLeave={() => {
+                setIsDropdownOpen(false);
+                setIsMoreMenuOpen(false);
+              }}
+            >
+              <button
+                onClick={() => onTradeTypeChange("market")}
+                className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Market
+              </button>
+              <button
+                onClick={() => onTradeTypeChange("limit")}
+                className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Limit
+              </button>
+              <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+              <div className="relative">
+                <button
+                  onMouseEnter={() => setIsMoreMenuOpen(true)}
+                  className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between"
+                >
+                  More
+                  <span className="text-gray-500">{">"}</span>
+                </button>
+                
+                {isMoreMenuOpen && (
+                  <div 
+                    className="absolute left-full top-0 mt-0 ml-0 py-1 w-32 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700"
+                    onMouseLeave={() => setIsMoreMenuOpen(false)}
+                  >
+                    <button
+                      onClick={() => console.log("Merge clicked")}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Merge
+                    </button>
+                    <button
+                      onClick={() => console.log("Split clicked")}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Split
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-6">
@@ -100,6 +184,36 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
           <span className="text-sm">{noPrice}</span>
         </button>
       </div>
+
+      {tradeType === "limit" && (
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Limit Price
+          </label>
+          <div className="flex items-center">
+            <button 
+              className="px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-600"
+              onClick={() => onLimitPriceChange((Number(limitPrice) - 1).toString())}
+            >
+              -
+            </button>
+            <input
+              type="text"
+              value={limitPrice}
+              onChange={(e) => onLimitPriceChange(e.target.value)}
+              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600
+                       text-gray-900 dark:text-white bg-white dark:bg-gray-700
+                       focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button 
+              className="px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-r-md border border-l-0 border-gray-300 dark:border-gray-600"
+              onClick={() => onLimitPriceChange((Number(limitPrice) + 1).toString())}
+            >
+              +
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-4">
         <div>
