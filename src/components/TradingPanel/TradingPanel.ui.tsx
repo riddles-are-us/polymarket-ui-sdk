@@ -218,7 +218,7 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            {selectedTab === "buy" ? "Amount" : "Shares"}
+            {tradeType === "market" ? (selectedTab === "buy" ? "Amount" : "Shares") : "Shares"}
           </label>
           <input
             type="number"
@@ -232,23 +232,59 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
         </div>
 
         <div className="flex space-x-2">
-          {quickAmounts.map((quickAmount, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                if (quickAmount === "Max") {
-                  onQuickAmountClick(maxAmount);
-                } else {
-                  onQuickAmountClick(Number(quickAmount));
-                }
-              }}
-              className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
-                       rounded-md text-gray-700 dark:text-gray-300 
-                       hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              {quickAmount === "Max" ? "Max" : `+${priceUnit}${quickAmount}`}
-            </button>
-          ))}
+          {tradeType === "limit" && selectedTab === "buy" ? (
+            ["-10", "+10"].map((adjustment, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  const value = parseInt(adjustment);
+                  onQuickAmountClick(value);
+                }}
+                className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
+                         rounded-md text-gray-700 dark:text-gray-300 
+                         hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                {adjustment}
+              </button>
+            ))
+          ) : selectedTab === "sell" ? (
+            ["25%", "50%", "Max"].map((percentage, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  if (percentage === "Max") {
+                    onQuickAmountClick(maxAmount);
+                  } else {
+                    const percent = parseInt(percentage) / 100;
+                    onQuickAmountClick(Math.floor(maxAmount * percent));
+                  }
+                }}
+                className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
+                         rounded-md text-gray-700 dark:text-gray-300 
+                         hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                {percentage}
+              </button>
+            ))
+          ) : (
+            quickAmounts.map((quickAmount, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  if (quickAmount === "Max") {
+                    onQuickAmountClick(maxAmount);
+                  } else {
+                    onQuickAmountClick(Number(quickAmount));
+                  }
+                }}
+                className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 
+                         rounded-md text-gray-700 dark:text-gray-300 
+                         hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                {quickAmount === "Max" ? "Max" : `+${priceUnit}${quickAmount}`}
+              </button>
+            ))
+          )}
         </div>
 
         <button
