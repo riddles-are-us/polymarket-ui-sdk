@@ -104,11 +104,11 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
             className="text-sm text-gray-900 dark:text-white flex items-center gap-1"
           >
             {tradeType === "market" ? "Market" : "Limit"}
-            {isDropdownOpen ? (
-              <ChevronUpIcon className="w-4 h-4" />
-            ) : (
-              <ChevronDownIcon className="w-4 h-4" />
-            )}
+            <ChevronDownIcon 
+              className={`w-4 h-4 transform transition-transform duration-200 ${
+                isDropdownOpen ? 'rotate-180' : ''
+              }`}
+            />
           </button>
           
           {isDropdownOpen && (
