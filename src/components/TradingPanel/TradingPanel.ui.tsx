@@ -65,7 +65,7 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
   const noPrice = `${100 - currentPrice}$`;
 
   return (
-    <div className={`bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm ${className}`}>
+    <div className={`bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm w-[320px] ${className}`}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
           <button
@@ -163,75 +163,81 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
       <div className="grid grid-cols-2 gap-4 mb-6">
         <button
           onClick={() => onOptionChange("yes")}
-          className={`p-4 rounded-lg flex flex-col items-center justify-center ${
+          className={`p-4 rounded-lg flex items-center justify-center ${
             selectedOption === "yes"
               ? "bg-green-500 text-white"
               : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
           }`}
         >
-          <span className="text-lg font-medium">Yes</span>
-          <span className="text-sm">{yesPrice}</span>
+          <div className="flex items-center space-x-2">
+            <span className="text-lg font-medium">Yes</span>
+            <span className="text-lg">{yesPrice}</span>
+          </div>
         </button>
         <button
           onClick={() => onOptionChange("no")}
-          className={`p-4 rounded-lg flex flex-col items-center justify-center ${
+          className={`p-4 rounded-lg flex items-center justify-center ${
             selectedOption === "no"
               ? "bg-red-500 text-white"
               : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
           }`}
         >
-          <span className="text-lg font-medium">No</span>
-          <span className="text-sm">{noPrice}</span>
+          <div className="flex items-center space-x-2">
+            <span className="text-lg font-medium">No</span>
+            <span className="text-lg">{noPrice}</span>
+          </div>
         </button>
       </div>
 
       {tradeType === "limit" && (
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Limit Price
-          </label>
-          <div className="flex items-center">
-            <button 
-              className="px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-600"
-              onClick={() => onLimitPriceChange((Number(limitPrice) - 1).toString())}
-            >
-              -
-            </button>
-            <input
-              type="text"
-              value={limitPrice}
-              onChange={(e) => onLimitPriceChange(e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600
-                       text-gray-900 dark:text-white bg-white dark:bg-gray-700
-                       focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button 
-              className="px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-r-md border border-l-0 border-gray-300 dark:border-gray-600"
-              onClick={() => onLimitPriceChange((Number(limitPrice) + 1).toString())}
-            >
-              +
-            </button>
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 w-[80px]">
+              Limit Price
+            </label>
+            <div className="flex items-center w-[180px]">
+              <button 
+                className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-600"
+                onClick={() => onLimitPriceChange((Number(limitPrice) - 1).toString())}
+              >
+                -
+              </button>
+              <input
+                type="text"
+                value={limitPrice}
+                onChange={(e) => onLimitPriceChange(e.target.value)}
+                className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600
+                         text-gray-900 dark:text-white bg-white dark:bg-gray-700
+                         focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button 
+                className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-r-md border border-l-0 border-gray-300 dark:border-gray-600"
+                onClick={() => onLimitPriceChange((Number(limitPrice) + 1).toString())}
+              >
+                +
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 w-[80px]">
             {tradeType === "market" ? (selectedTab === "buy" ? "Amount" : "Shares") : "Shares"}
           </label>
           <input
             type="number"
             value={amount}
             onChange={(e) => onAmountChange(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
+            className="w-[180px] px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md 
                      text-gray-900 dark:text-white bg-white dark:bg-gray-700
                      focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter amount..."
           />
         </div>
 
-        <div className="flex space-x-2">
+        <div className="flex justify-end space-x-2 ">
           {tradeType === "limit" && selectedTab === "buy" ? (
             ["-10", "+10"].map((adjustment, index) => (
               <button
