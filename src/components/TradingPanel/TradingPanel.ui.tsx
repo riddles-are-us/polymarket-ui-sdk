@@ -1,4 +1,5 @@
 import React from "react";
+import { ChevronUpIcon, ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
 export interface TradingPanelUIProps {
   currentPrice: number;
@@ -102,7 +103,12 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
             onMouseEnter={() => setIsDropdownOpen(true)}
             className="text-sm text-gray-900 dark:text-white flex items-center gap-1"
           >
-            {tradeType === "market" ? "Market" : "Limit"} {isDropdownOpen ? "^" : "v"}
+            {tradeType === "market" ? "Market" : "Limit"}
+            {isDropdownOpen ? (
+              <ChevronUpIcon className="w-4 h-4" />
+            ) : (
+              <ChevronDownIcon className="w-4 h-4" />
+            )}
           </button>
           
           {isDropdownOpen && (
@@ -132,7 +138,7 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
                   className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between"
                 >
                   More
-                  <span className="text-gray-500">{">"}</span>
+                  <ChevronRightIcon className="w-4 h-4 text-gray-500" />
                 </button>
                 
                 {isMoreMenuOpen && (
