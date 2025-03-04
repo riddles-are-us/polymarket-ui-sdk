@@ -2,10 +2,15 @@ import { useState, useCallback } from "react";
 
 export const useTradingPanel = (initialPrice: number = 75, initialMaxAmount: number = 1000) => {
   const [selectedTab, setSelectedTab] = useState<"buy" | "sell">("buy");
+  const [selectedOption, setSelectedOption] = useState<"yes" | "no">("yes");
   const [amount, setAmount] = useState<string>("0");
 
   const handleTabChange = useCallback((tab: "buy" | "sell") => {
     setSelectedTab(tab);
+  }, []);
+
+  const handleOptionChange = useCallback((option: "yes" | "no") => {
+    setSelectedOption(option);
   }, []);
 
   const handleAmountChange = useCallback((value: string) => {
@@ -30,9 +35,11 @@ export const useTradingPanel = (initialPrice: number = 75, initialMaxAmount: num
   return {
     currentPrice: initialPrice,
     selectedTab,
+    selectedOption,
     amount,
     maxAmount: initialMaxAmount,
     onTabChange: handleTabChange,
+    onOptionChange: handleOptionChange,
     onAmountChange: handleAmountChange,
     onQuickAmountClick: handleQuickAmountClick,
     onSubmit: handleSubmit,
