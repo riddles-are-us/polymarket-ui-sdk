@@ -35,8 +35,13 @@ export const useTradingPanel = (initialPrice: number = 75, initialMaxAmount: num
   }, []);
 
   const handleQuickAmountClick = useCallback((value: number) => {
-    setAmount(value.toString());
-  }, []);
+    setAmount(prev => {
+      const currentAmount = parseFloat(prev) || 0;
+      const newAmount = currentAmount + value;
+      // 确保不超过最大金额
+      return Math.min(newAmount, initialMaxAmount).toString();
+    });
+  }, [initialMaxAmount]);
 
   const handleSubmit = useCallback(() => {
     console.log(`${selectedTab} order submitted:`, {

@@ -246,7 +246,7 @@ export const TradingPanelUI: React.FC<TradingPanelUIProps> = ({
                        rounded-md text-gray-700 dark:text-gray-300 
                        hover:bg-gray-100 dark:hover:bg-gray-700"
             >
-              {typeof quickAmount === "number" ? `+$${quickAmount}` : quickAmount}
+              {quickAmount === "Max" ? "Max" : `+${priceUnit}${quickAmount}`}
             </button>
           ))}
         </div>
