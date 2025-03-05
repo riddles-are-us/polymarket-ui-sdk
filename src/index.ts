@@ -7,6 +7,9 @@ export * from "./hooks";
 // Types
 export * from "./types";
 
+// Contexts
+export { ThemeProvider, useThemeContext } from "./contexts/ThemeContext";
+
 // Re-export specific components and types
 export {
   // Navbar

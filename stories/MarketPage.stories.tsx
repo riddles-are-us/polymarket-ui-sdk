@@ -26,13 +26,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    marketId: "mock-market-1",
+    className: "custom-class",
   },
 };
 
 export const WithWidget: Story = {
-  args: {
-    marketId: "mock-market-1",
-  },
-  render: (args) => <MarketPageWidget {...args} />,
+  render: () => <MarketPageWidget />,
 };

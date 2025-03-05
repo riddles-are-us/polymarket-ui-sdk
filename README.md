@@ -1,22 +1,6 @@
 # Polymarket UI SDK
 
-A comprehensive React component library for building decentralized prediction market interfaces, designed specifically for Polymarket applications.
-
-## Features
-
-- 📊 Market Components
-  - Market Page Layout
-  - Trading Panel
-  - Order Book
-  - Market Charts
-  - Comments Section
-- 🎨 UI Components
-  - Responsive Navbar
-  - Dark Mode Support
-  - Tailwind CSS Integration
-- 📱 Responsive Design
-- 🌙 Dark Mode Support
-- 📚 Storybook Documentation
+A React component library for building Polymarket-style UIs.
 
 ## Installation
 
@@ -24,141 +8,85 @@ A comprehensive React component library for building decentralized prediction ma
 npm install polymarket-ui
 ```
 
-## Requirements
+## Usage
 
-- React ^19.0.0
-- React DOM ^19.0.0
-- Node.js (Latest LTS version recommended)
-
-## Quick Start
-
-```jsx
-import { MarketPage, TradingPanel, OrderBook } from "polymarket-ui";
-
-function App() {
-  return (
-    <MarketPage>
-      <TradingPanel />
-      <OrderBook />
-    </MarketPage>
-  );
-}
-```
-
-## Dark Mode
-
-The SDK comes with built-in dark mode support using Tailwind CSS. To use dark mode in your application:
-
-1. Wrap your application with the `ThemeProvider`:
+1. Wrap your app with ThemeProvider:
 
 ```jsx
 import { ThemeProvider } from "polymarket-ui";
 
 function App() {
-  return (
-    <ThemeProvider>
-      <YourApp />
-    </ThemeProvider>
-  );
+  return <ThemeProvider>{/* Your app content */}</ThemeProvider>;
 }
 ```
 
-2. Use the dark mode hook in your components:
+2. Use components:
 
 ```jsx
-import { useDarkMode } from "polymarket-ui";
+import { MarketPageWidget, OrderBookWidget, TradingPanelWidget, useThemeContext } from "polymarket-ui";
 
-function Component() {
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+function MyMarketPage() {
+  const { isDarkMode, toggleDarkMode } = useThemeContext();
 
   return (
     <div>
-      <button onClick={toggleDarkMode}>{isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}</button>
+      <button onClick={toggleDarkMode}>Toggle {isDarkMode ? "Light" : "Dark"} Mode</button>
+
+      <MarketPageWidget />
+
+      {/* Or use individual components */}
+      <OrderBookWidget />
+      <TradingPanelWidget currentPrice={75} maxAmount={1000} />
     </div>
   );
 }
 ```
 
-The dark mode state is automatically persisted in localStorage and applies the appropriate Tailwind CSS classes (`dark:`) to your components.
+## Features
 
-## Available Components
+- 🌗 Dark/Light mode support with ThemeProvider
+- 📊 Market charts and order books
+- 💰 Trading panels
+- 💬 Comments section
+- 📱 Responsive design
+- 🎨 Customizable styling with Tailwind CSS
 
-### MarketPage
+## Components
 
-The main container component for displaying prediction market information.
+- `MarketPageWidget`: A complete market page layout
+- `OrderBookWidget`: Real-time order book display
+- `TradingPanelWidget`: Trading interface with buy/sell options
+- `MarketChartWidget`: Price chart visualization
+- `CommentsWidget`: Discussion and comments section
+- `NavbarWidget`: Navigation bar
 
-### TradingPanel
+## Hooks
 
-Interactive component for executing trades and managing positions.
+- `useThemeContext`: Access and control theme settings
+- `useOrderBook`: Order book data and functionality
+- `useTradingPanel`: Trading panel state and actions
+- `useMarketChart`: Chart data and controls
+- `useComments`: Comments functionality
 
-### OrderBook
+## Styling
 
-Real-time display of market orders and trading activity.
-
-### MarketChart
-
-Price history and market trend visualization component.
-
-### Comments
-
-Community discussion and market sentiment component.
-
-### Navbar
-
-Customizable navigation component with built-in dark mode toggle.
-
-## Development
-
-### Setup
+This package uses Tailwind CSS for styling. Make sure to include Tailwind CSS in your project:
 
 ```bash
-# Clone the repository
-git clone
-
-# Install dependencies
-npm install
-
-# Start Storybook development server
-npm run storybook
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
 ```
 
-### Scripts
+Update your tailwind.config.js:
 
-- `npm run dev` - Start development server (No page demo yet)
-- `npm run build` - Build for production
-- `npm run storybook` - Start Storybook development environment
-- `npm run build-storybook` - Build Storybook for deployment
-
-## Storybook
-
-We use Storybook for component development and documentation. To view the component library:
-
-1. Run `npm run storybook`
-2. Open `http://localhost:6006` in your browser
-
-## Technologies
-
-- React
-- TypeScript
-- Tailwind CSS
-- Storybook
-- Vite
-- Rollup
-- Recharts (for charts)
-- React Router DOM
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-ISC License
-
-## Support
-
-For support, please open an issue in the GitHub repository or contact the maintainers.
+```js
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./src/**/*.{js,jsx,ts,tsx}", "./node_modules/polymarket-ui/**/*.{js,jsx,ts,tsx}"],
+  darkMode: "class",
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+```
