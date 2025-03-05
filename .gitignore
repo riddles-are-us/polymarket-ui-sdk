@@ -48,4 +48,4 @@ yarn-error.log*
 # Temporary files
 *.log
 *.tmp
-*.temp 
+*.temp stories/
