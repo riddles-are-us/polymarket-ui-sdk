@@ -14,12 +14,12 @@ export interface NavigationBottomUIProps {
 }
 
 export const NavigationBottomUI: React.FC<NavigationBottomUIProps> = ({ items, onSearchClick, className = "" }) => {
-  const defaultItems = [
-    { label: "Markets", icon: Squares2X2Icon },
-    { label: "Dashboards", icon: ChartBarIcon },
-    { label: "Sports", icon: StarIcon },
-    { label: "Activity", icon: BellIcon },
-    { label: "Ranks", icon: TrophyIcon },
+  const defaultItems: NavigationItem[] = [
+    { label: "Markets", icon: Squares2X2Icon, onClick: () => {} },
+    { label: "Dashboards", icon: ChartBarIcon, onClick: () => {} },
+    { label: "Sports", icon: StarIcon, onClick: () => {} },
+    { label: "Activity", icon: BellIcon, onClick: () => {} },
+    { label: "Ranks", icon: TrophyIcon, onClick: () => {} },
   ];
 
   const navigationItems = items || defaultItems;

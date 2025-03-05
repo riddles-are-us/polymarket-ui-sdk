@@ -7,11 +7,10 @@ import { CommentsWidget } from "../Comments";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 export interface MarketPageUIProps {
-  marketId: string;
   className?: string;
 }
 
-export const MarketPageUI: React.FC<MarketPageUIProps> = ({ marketId, className = "" }) => {
+export const MarketPageUI: React.FC<MarketPageUIProps> = ({ className = "" }) => {
   const isMobile = useMediaQuery("(max-width: 1024px)");
 
   return (

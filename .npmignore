@@ -1,6 +1,5 @@
 stories/
 .storybook/
-src/
 node_modules/
 .gitignore
 .DS_Store
@@ -11,3 +10,11 @@ postcss.config.js
 tsconfig.json
 tsconfig.node.json
 tsconfig.app.json
+.git/
+.github/
+.vscode/
+coverage/
+tests/
+__tests__/
+*.test.*
+*.spec.*

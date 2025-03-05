@@ -7,7 +7,8 @@ export interface OrderItem {
 }
 
 export interface OrderBookUIProps {
-  title?: string;
+  title: string;
+  className?: string;
   asks: OrderItem[];
   bids: OrderItem[];
   summary: {
@@ -15,15 +16,14 @@ export interface OrderBookUIProps {
     spread: number;
     priceDirection: "up" | "down" | "neutral";
   };
-  config?: {
-    priceUnit?: string;
-    quantityLabel?: string;
-    totalLabel?: string;
-    askColor?: string;
-    bidColor?: string;
+  config: {
+    priceUnit: string;
+    quantityLabel: string;
+    totalLabel: string;
+    askColor: string;
+    bidColor: string;
   };
-  onOrderClick?: (order: OrderItem, type: "ask" | "bid") => void;
-  className?: string;
+  onOrderClick: (order: OrderItem, type: "ask" | "bid") => void;
 }
 
 export const OrderBookUI: React.FC<OrderBookUIProps> = ({

@@ -1,6 +1,10 @@
 import React from "react";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
-export const App: React.FC = ({ children }) => {
+interface AppProps {
+  children?: React.ReactNode;
+}
+
+export const App: React.FC<AppProps> = ({ children }) => {
   return <ThemeProvider>{children}</ThemeProvider>;
 };

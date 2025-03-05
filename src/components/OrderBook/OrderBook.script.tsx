@@ -142,7 +142,8 @@ export const useOrderBook = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Calculate price direction
-  const priceDirection = lastPrice > previousPrice ? "up" : lastPrice < previousPrice ? "down" : "neutral";
+  const priceDirection: "up" | "down" | "neutral" =
+    lastPrice > previousPrice ? "up" : lastPrice < previousPrice ? "down" : "neutral";
 
   // Ensure latest price is within the order book range
   useEffect(() => {
@@ -300,21 +301,19 @@ export const useOrderBook = () => {
     [lastPrice, fixedOrderCount]
   );
 
-  const spread = asks.length && bids.length ? Number((asks[0].price - bids[0].price).toFixed(2)) : 0;
-
   return {
     asks,
     bids,
     summary: {
       lastPrice,
-      spread: asks.length && bids.length ? asks[0].price - bids[0].price : 2,
+      spread: asks.length && bids.length ? Number((asks[0].price - bids[0].price).toFixed(2)) : 0,
       priceDirection,
     },
     config: {
-      priceUnit: "¢",
-      quantityLabel: "SHARES",
-      totalLabel: "TOTAL",
-      askColor: "text-orange-500",
+      priceUnit: "$",
+      quantityLabel: "Quantity",
+      totalLabel: "Total",
+      askColor: "text-red-500",
       bidColor: "text-green-500",
     },
     onOrderClick: handleOrderClick,

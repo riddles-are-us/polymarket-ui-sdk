@@ -21,7 +21,7 @@ A comprehensive React component library for building decentralized prediction ma
 ## Installation
 
 ```bash
-npm install polymarket-ui-sdk
+npm install polymarket-ui
 ```
 
 ## Requirements
@@ -33,7 +33,7 @@ npm install polymarket-ui-sdk
 ## Quick Start
 
 ```jsx
-import { MarketPage, TradingPanel, OrderBook } from "polymarket-ui-sdk";
+import { MarketPage, TradingPanel, OrderBook } from "polymarket-ui";
 
 function App() {
   return (
@@ -52,7 +52,7 @@ The SDK comes with built-in dark mode support using Tailwind CSS. To use dark mo
 1. Wrap your application with the `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider } from "polymarket-ui-sdk";
+import { ThemeProvider } from "polymarket-ui";
 
 function App() {
   return (
@@ -66,7 +66,7 @@ function App() {
 2. Use the dark mode hook in your components:
 
 ```jsx
-import { useDarkMode } from "polymarket-ui-sdk";
+import { useDarkMode } from "polymarket-ui";
 
 function Component() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();

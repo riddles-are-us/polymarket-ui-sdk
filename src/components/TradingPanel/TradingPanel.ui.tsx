@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronUpIcon, ChevronDownIcon, ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon, ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 export interface TradingPanelUIProps {
   currentPrice: number;

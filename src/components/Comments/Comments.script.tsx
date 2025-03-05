@@ -51,6 +51,11 @@ export const useComments = () => {
     // Implement sort logic
   }, []);
 
+  const handleReply = useCallback((commentId: string, content: string) => {
+    console.log("Reply to comment:", commentId, "with content:", content);
+    // Implement reply functionality
+  }, []);
+
   return {
     comments,
     totalComments: comments.length,
@@ -58,5 +63,6 @@ export const useComments = () => {
     onAddComment: handleAddComment,
     onLikeComment: handleLikeComment,
     onSortChange: handleSortChange,
+    onReply: handleReply,
   };
 };
