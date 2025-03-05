@@ -49,3 +49,7 @@ yarn-error.log*
 *.log
 *.tmp
 *.temp stories/
+
+# Storybook
+stories/
+.storybook/

@@ -182,11 +182,11 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
       </nav>
 
       {/* Categories Bar */}
-      <div
+      {/* <div
         className="bg-white dark:bg-gray-900 text-sm border-b border-gray-200 dark:border-gray-800 overflow-x-auto w-full"
         style={{
-          msOverflowStyle: "none" /* IE and Edge */,
-          scrollbarWidth: "none" /* Firefox */,
+          msOverflowStyle: "none",
+          scrollbarWidth: "none",
         }}
       >
         <div className="w-full px-4">
@@ -230,7 +230,7 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
             </span>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Mobile Search - Only visible when search is open */}
       <div className={`md:hidden bg-white dark:bg-gray-900 p-4 w-full ${isSearchOpen ? "block" : "hidden"}`}>
