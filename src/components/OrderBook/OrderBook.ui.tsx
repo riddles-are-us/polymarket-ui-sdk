@@ -176,9 +176,9 @@ export const OrderBookUI: React.FC<OrderBookUIProps> = ({
                       >
                         {index === visibleAsks.length - 1 && (
                           <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                            <span className="bg-red-100/80 dark:bg-red-900/80 text-red-500 text-xs px-2 py-1 rounded">
+                            {/* <span className="bg-red-100/80 dark:bg-red-900/80 text-red-500 text-xs px-2 py-1 rounded">
                               Asks
-                            </span>
+                            </span> */}
                           </div>
                         )}
                         {renderOrderRow(ask, "ask")}
@@ -213,9 +213,9 @@ export const OrderBookUI: React.FC<OrderBookUIProps> = ({
                       <div className={index === 0 ? "bg-green-100/50 dark:bg-green-900/50 px-3" : "px-3"}>
                         {index === 0 && (
                           <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                            <span className="bg-green-100/80 dark:bg-green-900/80 text-green-500 text-xs px-2 py-1 rounded">
+                            {/* <span className="bg-green-100/80 dark:bg-green-900/80 text-green-500 text-xs px-2 py-1 rounded">
                               Bids
-                            </span>
+                            </span> */}
                           </div>
                         )}
                         {renderOrderRow(bid, "bid")}
@@ -245,9 +245,9 @@ export const OrderBookUI: React.FC<OrderBookUIProps> = ({
                       >
                         {index === visibleBids.length - 1 && (
                           <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                            <span className="bg-green-100/80 dark:bg-green-900/80 text-green-500 text-xs px-2 py-1 rounded">
+                            {/* <span className="bg-green-100/80 dark:bg-green-900/80 text-green-500 text-xs px-2 py-1 rounded">
                               Bids
-                            </span>
+                            </span> */}
                           </div>
                         )}
                         {renderOrderRow(bid, "bid")}
@@ -282,9 +282,9 @@ export const OrderBookUI: React.FC<OrderBookUIProps> = ({
                       <div className={index === 0 ? "bg-red-100/50 dark:bg-red-900/50 px-3" : "px-3"}>
                         {index === 0 && (
                           <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                            <span className="bg-red-100/80 dark:bg-red-900/80 text-red-500 text-xs px-2 py-1 rounded">
+                            {/* <span className="bg-red-100/80 dark:bg-red-900/80 text-red-500 text-xs px-2 py-1 rounded">
                               Asks
-                            </span>
+                            </span> */}
                           </div>
                         )}
                         {renderOrderRow(ask, "ask")}
