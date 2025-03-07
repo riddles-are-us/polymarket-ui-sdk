@@ -16,7 +16,8 @@ npm install polymarket-ui
 import { ThemeProvider } from "polymarket-ui";
 
 function App() {
-  return <ThemeProvider>{/* Your app content */}</ThemeProvider>;
+  // You can configure the default theme (true = dark mode, false = light mode)
+  return <ThemeProvider defaultDarkMode={true}>{/* Your app content */}</ThemeProvider>;
 }
 ```
 
@@ -63,10 +64,7 @@ function MyMarketPage() {
 ## Hooks
 
 - `useThemeContext`: Access and control theme settings
-- `useOrderBook`: Order book data and functionality
-- `useTradingPanel`: Trading panel state and actions
-- `useMarketChart`: Chart data and controls
-- `useComments`: Comments functionality
+- `useMediaQuery`: Media query hook
 
 ## Styling
 
