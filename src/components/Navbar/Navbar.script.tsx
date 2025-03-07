@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react";
-import { useDarkMode } from "../../hooks/useDarkMode";
+import { useThemeContext } from "../../contexts/ThemeContext";
 
 export const useNavbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState<string>();
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { isDarkMode, toggleDarkMode } = useThemeContext();
 
   const handleSearch = useCallback((query: string) => {
     console.log("Search:", query);

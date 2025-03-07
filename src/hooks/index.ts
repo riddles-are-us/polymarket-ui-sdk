@@ -1,2 +1,2 @@
-export * from "./useDarkMode";
 export * from "./useNavBar";
+export * from "./useMediaQuery";
