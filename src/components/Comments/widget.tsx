@@ -1,8 +1,7 @@
-import React from "react";
 import { CommentsUI } from "./Comments.ui";
 import { useComments } from "./Comments.script";
 
-export const CommentsWidget: React.FC = () => {
+export const CommentsWidget = () => {
   const commentsProps = useComments();
   return <CommentsUI {...commentsProps} />;
 };

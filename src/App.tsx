@@ -5,6 +5,6 @@ interface AppProps {
   children?: React.ReactNode;
 }
 
-export const App: React.FC<AppProps> = ({ children }) => {
+export const App = ({ children }: AppProps) => {
   return <ThemeProvider>{children}</ThemeProvider>;
 };

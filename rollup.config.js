@@ -33,4 +33,16 @@ export default {
     }),
   ],
   external: ["react", "react-dom"],
+  
+  // 添加选项忽略第三方库的循环依赖警告
+  onwarn(warning, warn) {
+    // 忽略d3-interpolate和recharts的循环依赖警告
+    if (warning.code === 'CIRCULAR_DEPENDENCY' && 
+        (warning.message.includes('d3-interpolate') || 
+         warning.message.includes('recharts'))) {
+      return;
+    }
+    // 对其他警告使用默认处理
+    warn(warning);
+  }
 };
