@@ -1,301 +1,304 @@
 import React, { useState } from "react";
+import { OrderItem, OrderBookTab } from "../../hooks/useOrderBook";
 
-export interface OrderItem {
-  price: number;
-  quantity: number;
-  total: number;
-}
-
+/**
+ * Props for OrderBookUI component
+ */
 export interface OrderBookUIProps {
-  title: string;
-  className?: string;
+  /** Title of the order book */
+  title?: string;
+  /** Ask (sell) orders */
   asks: OrderItem[];
+  /** Bid (buy) orders */
   bids: OrderItem[];
-  summary: {
-    lastPrice: number;
-    spread: number;
-    priceDirection: "up" | "down" | "neutral";
-  };
-  config: {
-    priceUnit: string;
-    quantityLabel: string;
-    totalLabel: string;
-    askColor: string;
-    bidColor: string;
-  };
-  onOrderClick: (order: OrderItem, type: "ask" | "bid") => void;
+  /** Last price */
+  lastPrice?: number;
+  /** Price spread */
+  spread: number;
+  /** Currently active tab */
+  activeTab: OrderBookTab;
+  /** Callback for tab change */
+  onTabChange: (tab: OrderBookTab) => void;
+  /** Price symbol (e.g., "$", "¢") */
+  priceSymbol?: string;
+  /** Maximum visible height (px or CSS value) */
+  maxHeight?: string;
+  /** Custom width (px or CSS value) */
+  width?: string;
+  /** Additional CSS class name */
+  className?: string;
+  /** Show rewards section */
+  showRewards?: boolean;
+  /** ReactNode for rewards tooltip explanation */
+  rewardsTooltip?: React.ReactNode;
+  /** Callback for refresh button */
+  onRefresh?: () => void;
 }
 
+/**
+ * Order book UI component
+ */
 export const OrderBookUI: React.FC<OrderBookUIProps> = ({
   title = "Order Book",
   asks,
   bids,
-  summary,
-  config = {
-    priceUnit: "¢",
-    quantityLabel: "SHARES",
-    totalLabel: "TOTAL",
-    askColor: "text-orange-500",
-    bidColor: "text-green-500",
-  },
-  onOrderClick,
+  lastPrice,
+  spread,
+  activeTab,
+  onTabChange,
+  priceSymbol = "¢",
+  maxHeight,
+  width,
   className = "",
+  showRewards = false,
+  rewardsTooltip,
+  onRefresh,
 }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [activeTab, setActiveTab] = useState<"yes" | "no">("yes");
+  const [collapsed, setCollapsed] = useState(false);
 
-  const renderOrderRow = (order: OrderItem, type: "bid" | "ask") => (
+  const formatPrice = (price: number) => {
+    return `${price.toFixed(2)}${priceSymbol}`;
+  };
+
+  const formatQuantity = (quantity: number) => {
+    return quantity.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
+  const formatTotal = (total: number) => {
+    return `$${total.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  };
+
+  const calculateVolumeWidth = (order: OrderItem, items: OrderItem[]) => {
+    const maxTotal = Math.max(...items.map((item) => item.total));
+    return maxTotal > 0 ? `${(order.total / maxTotal) * 100}%` : "0%";
+  };
+
+  // Determine font sizes based on component width
+  const getResponsiveSizes = () => {
+    const sizes = {
+      title: "text-base",
+      header: "text-sm",
+      content: "text-xs",
+    };
+
+    if (!width) return sizes;
+
+    const numericWidth = parseInt(width.replace(/[^0-9]/g, ""));
+
+    if (numericWidth < 400) {
+      sizes.title = "text-sm";
+      sizes.header = "text-xs";
+      sizes.content = "text-xs";
+    } else if (numericWidth >= 600) {
+      sizes.title = "text-lg";
+      sizes.header = "text-base";
+      sizes.content = "text-sm";
+    }
+
+    return sizes;
+  };
+
+  const fontSizes = getResponsiveSizes();
+
+  const renderOrderRow = (order: OrderItem, type: "ask" | "bid", items: OrderItem[]) => (
     <div
-      className="grid grid-cols-4 py-2 text-sm cursor-pointer transition-colors duration-150 relative"
-      onClick={() => onOrderClick?.(order, type)}
+      key={`${type}-${order.price}`}
+      className={`relative grid grid-cols-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${fontSizes.content} text-gray-800 dark:text-gray-200`}
+      style={{ gridTemplateColumns: "1fr 0.8fr 1fr 1.2fr" }}
     >
-      <span className="text-gray-400 dark:text-gray-400">{type === "ask" ? "TRADE YES" : "TRADE NO"}</span>
-      <span className={`${type === "bid" ? config.bidColor : config.askColor}`}>
-        {order.price}
-        {config.priceUnit}
-      </span>
-      <span className="text-right text-gray-800 dark:text-white">
-        {order.quantity.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-      </span>
-      <span className="text-right text-gray-800 dark:text-white">
-        ${order.total.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-      </span>
+      <div
+        className={`absolute top-0 bottom-0 left-0 ${
+          type === "ask" ? "bg-red-600/30 dark:bg-red-900/40" : "bg-green-600/30 dark:bg-green-800/40"
+        }`}
+        style={{
+          width: calculateVolumeWidth(order, items),
+          zIndex: 1,
+        }}
+      />
+      <div className="z-10 pl-2">{type === "ask" ? "TRADE YES" : "TRADE NO"}</div>
+      <div
+        className={`z-10 text-right ${
+          type === "ask" ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"
+        }`}
+      >
+        {formatPrice(order.price)}
+      </div>
+      <div className="z-10 text-right pr-3">{formatQuantity(order.quantity)}</div>
+      <div className="z-10 text-right pr-2">{formatTotal(order.total)}</div>
     </div>
   );
 
-  // Define visible orders based on active tab
-  const visibleAsks = asks.slice(0, 4);
-  const visibleBids = bids.slice(0, 4);
+  const containerStyles = {
+    width: width || "100%",
+    maxHeight: collapsed ? "auto" : maxHeight,
+  };
 
   return (
     <div
-      className={`bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden ${className}`}
+      className={`bg-white dark:bg-[#1a2233] rounded-lg shadow-md overflow-hidden ${className}`}
+      style={containerStyles}
     >
       {/* Header */}
-      <div className="p-4 flex items-center justify-between">
+      <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center">
+          <h3 className={`${fontSizes.title || "text-base"} font-medium text-gray-700 dark:text-gray-300`}>{title}</h3>
+        </div>
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">{title}</h2>
-          <button className="text-gray-400 rounded-full bg-gray-100 dark:bg-gray-800 w-6 h-6 flex items-center justify-center text-sm">
-            ?
+          {showRewards && (
+            <div className="flex items-center mr-2 group relative">
+              <span className={`text-blue-600 dark:text-blue-400 ${fontSizes.content || "text-sm"} mr-1`}>Rewards</span>
+              <span className="h-2 w-2 rounded-full bg-green-500"></span>
+              {rewardsTooltip && (
+                <div
+                  className="absolute top-full mt-2 right-0 bg-gray-800 text-white text-xs rounded p-2 shadow-lg 
+                  w-48 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50"
+                >
+                  {rewardsTooltip}
+                </div>
+              )}
+            </div>
+          )}
+          {onRefresh && (
+            <button
+              onClick={onRefresh}
+              className="text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300 mr-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          )}
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300"
+          >
+            {collapsed ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            )}
           </button>
         </div>
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-colors"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d={isCollapsed ? "M19 9l-7 7-7-7" : "M5 15l7-7 7 7"}
-            />
-          </svg>
-        </button>
       </div>
 
-      {!isCollapsed && (
-        <>
+      {!collapsed && (
+        <div>
           {/* Tabs */}
-          <div className="flex justify-between border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700">
             <div className="flex">
               <button
-                onClick={() => setActiveTab("yes")}
-                className={`px-6 py-3 font-medium text-lg ${
+                className={`px-4 py-3 ${fontSizes.header || "text-base"} font-medium ${
                   activeTab === "yes"
-                    ? "text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white"
+                    ? "text-gray-900 dark:text-white border-b-2 border-blue-500"
                     : "text-gray-500 dark:text-gray-400"
                 }`}
+                onClick={() => onTabChange("yes")}
               >
                 Trade Yes
               </button>
               <button
-                onClick={() => setActiveTab("no")}
-                className={`px-6 py-3 font-medium text-lg ${
+                className={`px-4 py-3 ${fontSizes.header || "text-base"} font-medium ${
                   activeTab === "no"
-                    ? "text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white"
+                    ? "text-gray-900 dark:text-white border-b-2 border-blue-500"
                     : "text-gray-500 dark:text-gray-400"
                 }`}
+                onClick={() => onTabChange("no")}
               >
                 Trade No
               </button>
             </div>
-            <div className="flex items-center pr-4">
-              <span className="text-blue-500 mr-2">Rewards</span>
-              <span className="h-3 w-3 rounded-full bg-green-500 mr-2"></span>
-              <button className="text-gray-500 dark:text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-              </button>
-            </div>
+            {showRewards && (
+              <div className="px-3">
+                <button className="text-gray-500 dark:text-gray-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      fillRule="evenodd"
+                      d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Table Header */}
-          <div className="grid grid-cols-4 p-3 text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-800">
+          <div
+            className={`grid grid-cols-4 py-2 ${fontSizes.content} text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 px-3 font-semibold`}
+            style={{ gridTemplateColumns: "1fr 0.8fr 1fr 1.2fr" }}
+          >
             <div>{activeTab === "yes" ? "TRADE YES" : "TRADE NO"}</div>
-            <div>PRICE</div>
-            <div className="text-right">{config.quantityLabel}</div>
-            <div className="text-right">{config.totalLabel}</div>
+            <div className="text-right">PRICE</div>
+            <div className="text-right pr-3">SHARES</div>
+            <div className="text-right pr-2">TOTAL</div>
           </div>
 
-          {/* Order Rows */}
-          <div>
-            {activeTab === "yes" ? (
-              <>
-                {/* Asks (Sell orders) */}
-                <div className="space-y-0">
-                  {visibleAsks.map((ask, index) => (
-                    <div key={`ask-${index}`} className="relative">
-                      <div
-                        className="absolute left-0 top-0 bottom-0 bg-red-200/30 dark:bg-red-800/30"
-                        style={{
-                          width: `${(ask.total / Math.max(...asks.map((a) => a.total))) * 100}%`,
-                          maxWidth: "100%",
-                        }}
-                      />
-                      <div
-                        className={index === visibleAsks.length - 1 ? "bg-red-100/50 dark:bg-red-900/50 px-3" : "px-3"}
-                      >
-                        {index === visibleAsks.length - 1 && (
-                          <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                            {/* <span className="bg-red-100/80 dark:bg-red-900/80 text-red-500 text-xs px-2 py-1 rounded">
-                              Asks
-                            </span> */}
-                          </div>
-                        )}
-                        {renderOrderRow(ask, "ask")}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+          {/* Order Book Content - Scrollable area */}
+          <div
+            className="overflow-y-auto"
+            style={{
+              maxHeight: maxHeight ? `calc(${maxHeight} - 150px)` : "300px",
+            }}
+          >
+            {/* Asks Section with Label */}
+            <div className="border-b border-gray-200 dark:border-gray-700">
+              <div className={`px-2 py-1 bg-red-500/10 dark:bg-red-900/30 ${fontSizes.content} flex items-center`}>
+                <div className="bg-red-500 w-4 h-4 flex items-center justify-center text-white rounded-sm mr-1">A</div>
+                <span className="text-gray-600 dark:text-gray-300">Asks</span>
+              </div>
+              <div>{asks.map((ask) => renderOrderRow(ask, "ask", asks))}</div>
+            </div>
 
-                {/* Last Price and Spread */}
-                <div className="flex justify-between p-3 text-gray-500 dark:text-gray-400 border-y border-gray-200 dark:border-gray-800">
-                  <div>
-                    Last: {summary.lastPrice}
-                    {config.priceUnit}
-                  </div>
-                  <div>
-                    Spread: {summary.spread}
-                    {config.priceUnit}
-                  </div>
+            {/* Last Price & Spread */}
+            {lastPrice && (
+              <div
+                className={`flex justify-between ${fontSizes.content} p-2 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800`}
+              >
+                <div>
+                  <span className="text-gray-500 dark:text-gray-400">Last:</span>{" "}
+                  <span className="font-medium text-gray-800 dark:text-gray-200">{formatPrice(lastPrice)}</span>
                 </div>
-
-                {/* Bids (Buy orders) */}
-                <div className="space-y-0">
-                  {visibleBids.map((bid, index) => (
-                    <div key={`bid-${index}`} className="relative">
-                      <div
-                        className="absolute left-0 top-0 bottom-0 bg-green-200/30 dark:bg-green-800/30"
-                        style={{
-                          width: `${(bid.total / Math.max(...bids.map((b) => b.total))) * 100}%`,
-                          maxWidth: "100%",
-                        }}
-                      />
-                      <div className={index === 0 ? "bg-green-100/50 dark:bg-green-900/50 px-3" : "px-3"}>
-                        {index === 0 && (
-                          <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                            {/* <span className="bg-green-100/80 dark:bg-green-900/80 text-green-500 text-xs px-2 py-1 rounded">
-                              Bids
-                            </span> */}
-                          </div>
-                        )}
-                        {renderOrderRow(bid, "bid")}
-                      </div>
-                    </div>
-                  ))}
+                <div>
+                  <span className="text-gray-500 dark:text-gray-400">Spread:</span>{" "}
+                  <span className="font-medium text-gray-800 dark:text-gray-200">{formatPrice(spread)}</span>
                 </div>
-              </>
-            ) : (
-              <>
-                {/* For Trade No tab - bids appear at top, asks at bottom */}
-                {/* Bids (Buy orders) */}
-                <div className="space-y-0">
-                  {visibleBids.map((bid, index) => (
-                    <div key={`bid-${index}`} className="relative">
-                      <div
-                        className="absolute left-0 top-0 bottom-0 bg-green-200/30 dark:bg-green-800/30"
-                        style={{
-                          width: `${(bid.total / Math.max(...bids.map((b) => b.total))) * 100}%`,
-                          maxWidth: "100%",
-                        }}
-                      />
-                      <div
-                        className={
-                          index === visibleBids.length - 1 ? "bg-green-100/50 dark:bg-green-900/50 px-3" : "px-3"
-                        }
-                      >
-                        {index === visibleBids.length - 1 && (
-                          <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                            {/* <span className="bg-green-100/80 dark:bg-green-900/80 text-green-500 text-xs px-2 py-1 rounded">
-                              Bids
-                            </span> */}
-                          </div>
-                        )}
-                        {renderOrderRow(bid, "bid")}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Last Price and Spread */}
-                <div className="flex justify-between p-3 text-gray-500 dark:text-gray-400 border-y border-gray-200 dark:border-gray-800">
-                  <div>
-                    Last: {summary.lastPrice}
-                    {config.priceUnit}
-                  </div>
-                  <div>
-                    Spread: {summary.spread}
-                    {config.priceUnit}
-                  </div>
-                </div>
-
-                {/* Asks (Sell orders) */}
-                <div className="space-y-0">
-                  {visibleAsks.map((ask, index) => (
-                    <div key={`ask-${index}`} className="relative">
-                      <div
-                        className="absolute left-0 top-0 bottom-0 bg-red-200/30 dark:bg-red-800/30"
-                        style={{
-                          width: `${(ask.total / Math.max(...asks.map((a) => a.total))) * 100}%`,
-                          maxWidth: "100%",
-                        }}
-                      />
-                      <div className={index === 0 ? "bg-red-100/50 dark:bg-red-900/50 px-3" : "px-3"}>
-                        {index === 0 && (
-                          <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                            {/* <span className="bg-red-100/80 dark:bg-red-900/80 text-red-500 text-xs px-2 py-1 rounded">
-                              Asks
-                            </span> */}
-                          </div>
-                        )}
-                        {renderOrderRow(ask, "ask")}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
+              </div>
             )}
+
+            {/* Bids Section with Label */}
+            <div>
+              <div className={`px-2 py-1 bg-green-500/10 dark:bg-green-900/30 ${fontSizes.content} flex items-center`}>
+                <div className="bg-green-500 w-4 h-4 flex items-center justify-center text-white rounded-sm mr-1">
+                  B
+                </div>
+                <span className="text-gray-600 dark:text-gray-300">Bids</span>
+              </div>
+              <div>{bids.map((bid) => renderOrderRow(bid, "bid", bids))}</div>
+            </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
