@@ -22,12 +22,13 @@ export interface NavbarUIProps {
     onSearch: (query: string) => void;
   };
   menuItems?: NavigationItem[];
-  auth?: {
+  auth: {
     isLoggedIn: boolean;
-    userName?: string;
-    onLogin?: () => void;
-    onSignUp?: () => void;
-    onProfileClick?: () => void;
+    isConnected: boolean;
+    userName: string;
+    onLogin: () => void;
+    onConnect: () => void;
+    onProfileClick: () => void;
   };
   darkMode: {
     enabled: boolean;
@@ -147,35 +148,40 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
 
           {/* Right section: Auth */}
           <div data-testid="auth" className="flex items-center space-x-3">
-            {auth &&
-              (!auth.isLoggedIn ? (
-                <div className="flex items-center space-x-3">
-                  {auth.onLogin && (
+            {
+              <div className="flex items-center space-x-3">
+                {!auth.isLoggedIn ? (
                     <button
                       onClick={auth.onLogin}
                       className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm hidden sm:block w-20"
                     >
                       Log In
                     </button>
-                  )}
-                  {auth.onSignUp && (
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">{auth.userName}</span>
+                      <UserCircleIcon
+                        className="h-8 w-8 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
+                        onClick={auth.onProfileClick}
+                      />
+                    </div>
+                  )
+                }
+                {!auth.isConnected ? (
                     <button
-                      onClick={auth.onSignUp}
+                      onClick={auth.onConnect}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-full text-sm font-medium w-24"
                     >
-                      Sign Up
+                      Connect
                     </button>
-                  )}
-                </div>
-              ) : (
-                <div className="flex items-center space-x-2">
-                  <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">{auth.userName}</span>
-                  <UserCircleIcon
-                    className="h-8 w-8 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
-                    onClick={auth.onProfileClick}
-                  />
-                </div>
-              ))}
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">{auth.userName}</span>
+                    </div>
+                  )
+                }
+              </div>
+            }
             <SettingsDropdown darkMode={darkMode} onNavigate={onNavigate} auth={auth} />
           </div>
         </div>

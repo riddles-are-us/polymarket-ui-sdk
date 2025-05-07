@@ -3,6 +3,7 @@ import { useThemeContext } from "../../contexts/ThemeContext";
 
 export const useNavbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
   const [userName, setUserName] = useState<string>();
   const { isDarkMode, toggleDarkMode } = useThemeContext();
 
@@ -17,9 +18,9 @@ export const useNavbar = () => {
     setUserName("John Doe"); // Mock user data
   }, []);
 
-  const handleSignUp = useCallback(() => {
-    console.log("Sign up clicked");
-    // Implement sign up logic
+  const handleConnect = useCallback(() => {
+    console.log("Connect clicked");
+    // Implement connect logic
   }, []);
 
   const handleProfileClick = useCallback(() => {
@@ -52,9 +53,10 @@ export const useNavbar = () => {
     menuItems: defaultMenuItems,
     auth: {
       isLoggedIn,
+      isConnected,
       userName,
       onLogin: handleLogin,
-      onSignUp: handleSignUp,
+      onConnect: handleConnect,
       onProfileClick: handleProfileClick,
     },
     darkMode: {
