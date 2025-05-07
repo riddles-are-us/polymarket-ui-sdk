@@ -50,35 +50,6 @@ export const SettingsDropdown: React.FC<SettingsDropdownProps> = ({ darkMode, on
       {isOpen && (
         <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-800 z-50">
           <div className="py-2">
-            {/* Auth Section */}
-            {auth && !auth.isLoggedIn && (
-              <>
-                {auth.onLogin && (
-                  <button
-                    onClick={() => {
-                      if (auth.onLogin) auth.onLogin();
-                      setIsOpen(false);
-                    }}
-                    className="w-full px-4 py-2 text-left text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    Log In
-                  </button>
-                )}
-                {auth.onSignUp && (
-                  <button
-                    onClick={() => {
-                      if (auth.onSignUp) auth.onSignUp();
-                      setIsOpen(false);
-                    }}
-                    className="w-full px-4 py-2 text-left text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    Sign Up
-                  </button>
-                )}
-                <div className="border-t border-gray-200 dark:border-gray-800 my-2"></div>
-              </>
-            )}
-
             {/* Navigation Items */}
             {menuItems.map((item, index) => (
               <button
