@@ -152,35 +152,36 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
             {
               <div className="flex items-center space-x-3">
                 {!auth.isLoggedIn ? (
+                  <>
                     <button
                       onClick={auth.onLogin}
                       className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm hidden sm:block w-20"
                     >
                       Log In
                     </button>
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">{auth.userName}</span>
-                      <UserCircleIcon
-                        className="h-8 w-8 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
-                        onClick={auth.onProfileClick}
-                      />
-                    </div>
-                  )
-                }
-                {!auth.isConnected ? (
-                    <button
-                      onClick={auth.onConnect}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-full text-sm font-medium w-24"
-                    >
-                      Connect
-                    </button>
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">{auth.walletAddress}</span>
-                    </div>
-                  )
-                }
+                    {!auth.isConnected ? (
+                        <button
+                          onClick={auth.onConnect}
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-full text-sm font-medium w-24"
+                        >
+                          Connect
+                        </button>
+                      ) : (
+                        <div className="flex items-center space-x-2">
+                          <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">{auth.walletAddress}</span>
+                        </div>
+                      )
+                    }
+                  </>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">{auth.userName}</span>
+                    <UserCircleIcon
+                      className="h-8 w-8 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
+                      onClick={auth.onProfileClick}
+                    />
+                  </div>
+                )}
               </div>
             }
             <SettingsDropdown darkMode={darkMode} onNavigate={onNavigate} />
