@@ -2,7 +2,6 @@ import React from "react";
 import { NavbarWidget } from "../Navbar";
 import { MarketChartWidget } from "../MarketChart";
 import { TradingPanelWidget } from "../TradingPanel";
-import { OrderBookWidget } from "../OrderBook";
 import { CommentsWidget } from "../Comments";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 
@@ -22,7 +21,6 @@ export const MarketPageUI: React.FC<MarketPageUIProps> = ({ className = "" }) =>
           {/* Left column */}
           <div className="lg:col-span-2 space-y-6">
             <MarketChartWidget />
-            <OrderBookWidget />
             <CommentsWidget />
           </div>
 

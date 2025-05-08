@@ -1,7 +1,7 @@
 import React from "react";
 import { OrderBookUI } from "./OrderBook.ui";
 import { useOrderBook, OrderBookData } from "../../hooks/useOrderBook";
-export type { OrderBookData } from "../../hooks/useOrderBook";
+export type { OrderBookData, OrderBookTab } from "../../hooks/useOrderBook";
 
 /**
  * Props for the OrderBook

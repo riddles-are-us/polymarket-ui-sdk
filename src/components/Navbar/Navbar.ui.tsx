@@ -26,6 +26,7 @@ export interface NavbarUIProps {
     isLoggedIn: boolean;
     isConnected: boolean;
     userName: string;
+    walletAddress: string;
     onLogin: () => void;
     onConnect: () => void;
     onProfileClick: () => void;
@@ -176,13 +177,13 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
                     </button>
                   ) : (
                     <div className="flex items-center space-x-2">
-                      <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">{auth.userName}</span>
+                      <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">{auth.walletAddress}</span>
                     </div>
                   )
                 }
               </div>
             }
-            <SettingsDropdown darkMode={darkMode} onNavigate={onNavigate} auth={auth} />
+            <SettingsDropdown darkMode={darkMode} onNavigate={onNavigate} />
           </div>
         </div>
       </nav>

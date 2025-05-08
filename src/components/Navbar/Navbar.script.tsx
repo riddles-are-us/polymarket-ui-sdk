@@ -4,7 +4,8 @@ import { useThemeContext } from "../../contexts/ThemeContext";
 export const useNavbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const [userName, setUserName] = useState<string>();
+  const [walletAddress, setWalletAddress] = useState("");
+  const [userName, setUserName] = useState("");
   const { isDarkMode, toggleDarkMode } = useThemeContext();
 
   const handleSearch = useCallback((query: string) => {
@@ -20,6 +21,8 @@ export const useNavbar = () => {
 
   const handleConnect = useCallback(() => {
     console.log("Connect clicked");
+    setIsConnected(true);
+    setWalletAddress("0x1");
     // Implement connect logic
   }, []);
 
@@ -54,6 +57,7 @@ export const useNavbar = () => {
     auth: {
       isLoggedIn,
       isConnected,
+      walletAddress,
       userName,
       onLogin: handleLogin,
       onConnect: handleConnect,

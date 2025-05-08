@@ -38,10 +38,9 @@ export type { TradingPanelUIProps, TradingPanelWidgetProps } from "./components/
 export {
   // Order Book
   OrderBookUI,
-  OrderBookWidget,
-  useOrderBook,
+  OrderBook,
 } from "./components/OrderBook";
-export type { OrderBookUIProps, OrderItem } from "./components/OrderBook";
+export type { OrderBookUIProps, OrderBookProps, OrderBookData,  OrderBookTab } from "./components/OrderBook";
 
 export {
   // Comments

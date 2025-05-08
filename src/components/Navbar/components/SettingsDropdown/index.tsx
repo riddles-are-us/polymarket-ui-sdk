@@ -7,14 +7,9 @@ export interface SettingsDropdownProps {
     onToggle: () => void;
   };
   onNavigate?: (path: string) => void;
-  auth?: {
-    isLoggedIn: boolean;
-    onLogin?: () => void;
-    onSignUp?: () => void;
-  };
 }
 
-export const SettingsDropdown: React.FC<SettingsDropdownProps> = ({ darkMode, onNavigate, auth }) => {
+export const SettingsDropdown: React.FC<SettingsDropdownProps> = ({ darkMode, onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
