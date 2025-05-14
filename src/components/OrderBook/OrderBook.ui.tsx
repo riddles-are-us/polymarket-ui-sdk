@@ -106,9 +106,9 @@ export const OrderBookUI: React.FC<OrderBookUIProps> = ({
 
   const fontSizes = getResponsiveSizes();
 
-  const renderOrderRow = (order: OrderItem, type: "ask" | "bid", items: OrderItem[]) => (
+  const renderOrderRow = (order: OrderItem, type: "ask" | "bid", items: OrderItem[], index: number) => (
     <div
-      key={`${type}-${order.price}`}
+      key={`${index}`}
       className={`relative grid grid-cols-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${fontSizes.content} text-gray-800 dark:text-gray-200`}
       style={{ gridTemplateColumns: "1fr 0.8fr 1fr 1.2fr" }}
     >
@@ -273,7 +273,7 @@ export const OrderBookUI: React.FC<OrderBookUIProps> = ({
                   <div className="bg-red-500 w-4 h-4 flex items-center justify-center text-white rounded-sm mr-1">A</div>
                   <span className="text-gray-600 dark:text-gray-300">Asks</span>
                 </div>
-                <div>{asks.map((ask) => renderOrderRow(ask, "ask", asks))}</div>
+                <div>{asks.map((ask, index) => renderOrderRow(ask, "ask", asks, index))}</div>
               </div>
 
               {/* Last Price & Spread */}
@@ -300,7 +300,7 @@ export const OrderBookUI: React.FC<OrderBookUIProps> = ({
                   </div>
                   <span className="text-gray-600 dark:text-gray-300">Bids</span>
                 </div>
-                <div>{bids.map((bid) => renderOrderRow(bid, "bid", bids))}</div>
+                <div>{bids.map((bid, index) => renderOrderRow(bid, "bid", bids, index))}</div>
               </div>
               </>
             ) : (
@@ -314,7 +314,7 @@ export const OrderBookUI: React.FC<OrderBookUIProps> = ({
                   </div>
                   <span className="text-gray-600 dark:text-gray-300">Bids</span>
                 </div>
-                <div>{reversedBids.map((bid) => renderOrderRow(bid, "bid", reversedBids))}</div>
+                <div>{reversedBids.map((bid, index) => renderOrderRow(bid, "bid", reversedBids, index))}</div>
               </div>
 
               {/* Last Price & Spread */}
@@ -339,7 +339,7 @@ export const OrderBookUI: React.FC<OrderBookUIProps> = ({
                   <div className="bg-red-500 w-4 h-4 flex items-center justify-center text-white rounded-sm mr-1">A</div>
                   <span className="text-gray-600 dark:text-gray-300">Asks</span>
                 </div>
-                <div>{reversedAsks.map((ask) => renderOrderRow(ask, "ask", reversedAsks))}</div>
+                <div>{reversedAsks.map((ask, index) => renderOrderRow(ask, "ask", reversedAsks, index))}</div>
               </div>
               </>
             )}
