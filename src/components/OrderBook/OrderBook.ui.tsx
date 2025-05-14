@@ -139,6 +139,9 @@ export const OrderBookUI: React.FC<OrderBookUIProps> = ({
     maxHeight: collapsed ? "auto" : maxHeight,
   };
 
+  const reversedBids = [...bids].reverse();
+  const reversedAsks = [...asks].reverse();
+
   return (
     <div
       className={`bg-white dark:bg-[#1a2233] rounded-lg shadow-md overflow-hidden ${className}`}
@@ -262,41 +265,84 @@ export const OrderBookUI: React.FC<OrderBookUIProps> = ({
               maxHeight: maxHeight ? `calc(${maxHeight} - 150px)` : "300px",
             }}
           >
-            {/* Asks Section with Label */}
-            <div className="border-b border-gray-200 dark:border-gray-700">
-              <div className={`px-2 py-1 bg-red-500/10 dark:bg-red-900/30 ${fontSizes.content} flex items-center`}>
-                <div className="bg-red-500 w-4 h-4 flex items-center justify-center text-white rounded-sm mr-1">A</div>
-                <span className="text-gray-600 dark:text-gray-300">Asks</span>
+            {activeTab === "yes" ? (
+              <>
+              {/* Asks Section with Label */}
+              <div className="border-b border-gray-200 dark:border-gray-700">
+                <div className={`px-2 py-1 bg-red-500/10 dark:bg-red-900/30 ${fontSizes.content} flex items-center`}>
+                  <div className="bg-red-500 w-4 h-4 flex items-center justify-center text-white rounded-sm mr-1">A</div>
+                  <span className="text-gray-600 dark:text-gray-300">Asks</span>
+                </div>
+                <div>{asks.map((ask) => renderOrderRow(ask, "ask", asks))}</div>
               </div>
-              <div>{asks.map((ask) => renderOrderRow(ask, "ask", asks))}</div>
-            </div>
 
-            {/* Last Price & Spread */}
-            {lastPrice && (
-              <div
-                className={`flex justify-between ${fontSizes.content} p-2 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800`}
-              >
-                <div>
-                  <span className="text-gray-500 dark:text-gray-400">Last:</span>{" "}
-                  <span className="font-medium text-gray-800 dark:text-gray-200">{formatPrice(lastPrice)}</span>
+              {/* Last Price & Spread */}
+              {lastPrice && (
+                <div
+                  className={`flex justify-between ${fontSizes.content} p-2 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800`}
+                >
+                  <div>
+                    <span className="text-gray-500 dark:text-gray-400">Last:</span>{" "}
+                    <span className="font-medium text-gray-800 dark:text-gray-200">{formatPrice(lastPrice)}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500 dark:text-gray-400">Spread:</span>{" "}
+                    <span className="font-medium text-gray-800 dark:text-gray-200">{formatPrice(spread)}</span>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-gray-500 dark:text-gray-400">Spread:</span>{" "}
-                  <span className="font-medium text-gray-800 dark:text-gray-200">{formatPrice(spread)}</span>
+              )}
+
+              {/* Bids Section with Label */}
+              <div>
+                <div className={`px-2 py-1 bg-green-500/10 dark:bg-green-900/30 ${fontSizes.content} flex items-center`}>
+                  <div className="bg-green-500 w-4 h-4 flex items-center justify-center text-white rounded-sm mr-1">
+                    B
+                  </div>
+                  <span className="text-gray-600 dark:text-gray-300">Bids</span>
                 </div>
+                <div>{bids.map((bid) => renderOrderRow(bid, "bid", bids))}</div>
               </div>
+              </>
+            ) : (
+              <>
+              {/* For Trade No tab - bids appear at top, asks at bottom */}
+              {/* Bids Section with Label */}
+              <div>
+                <div className={`px-2 py-1 bg-green-500/10 dark:bg-green-900/30 ${fontSizes.content} flex items-center`}>
+                  <div className="bg-green-500 w-4 h-4 flex items-center justify-center text-white rounded-sm mr-1">
+                    B
+                  </div>
+                  <span className="text-gray-600 dark:text-gray-300">Bids</span>
+                </div>
+                <div>{reversedBids.map((bid) => renderOrderRow(bid, "bid", reversedBids))}</div>
+              </div>
+
+              {/* Last Price & Spread */}
+              {lastPrice && (
+                <div
+                  className={`flex justify-between ${fontSizes.content} p-2 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800`}
+                >
+                  <div>
+                    <span className="text-gray-500 dark:text-gray-400">Last:</span>{" "}
+                    <span className="font-medium text-gray-800 dark:text-gray-200">{formatPrice(lastPrice)}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500 dark:text-gray-400">Spread:</span>{" "}
+                    <span className="font-medium text-gray-800 dark:text-gray-200">{formatPrice(spread)}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Asks Section with Label */}
+              <div className="border-b border-gray-200 dark:border-gray-700">
+                <div className={`px-2 py-1 bg-red-500/10 dark:bg-red-900/30 ${fontSizes.content} flex items-center`}>
+                  <div className="bg-red-500 w-4 h-4 flex items-center justify-center text-white rounded-sm mr-1">A</div>
+                  <span className="text-gray-600 dark:text-gray-300">Asks</span>
+                </div>
+                <div>{reversedAsks.map((ask) => renderOrderRow(ask, "ask", reversedAsks))}</div>
+              </div>
+              </>
             )}
-
-            {/* Bids Section with Label */}
-            <div>
-              <div className={`px-2 py-1 bg-green-500/10 dark:bg-green-900/30 ${fontSizes.content} flex items-center`}>
-                <div className="bg-green-500 w-4 h-4 flex items-center justify-center text-white rounded-sm mr-1">
-                  B
-                </div>
-                <span className="text-gray-600 dark:text-gray-300">Bids</span>
-              </div>
-              <div>{bids.map((bid) => renderOrderRow(bid, "bid", bids))}</div>
-            </div>
           </div>
         </div>
       )}
