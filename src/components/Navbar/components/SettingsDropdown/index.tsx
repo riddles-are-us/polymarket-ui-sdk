@@ -11,6 +11,8 @@ export interface SettingsDropdownProps {
     isLoggedIn: boolean;
     onLogin?: () => void;
     onSignUp?: () => void;
+    loginText?: string;
+    signUpText?: string;
   };
 }
 
@@ -61,7 +63,7 @@ export const SettingsDropdown: React.FC<SettingsDropdownProps> = ({ darkMode, on
                     }}
                     className="w-full px-4 py-2 text-left text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
-                    Log In
+                    {auth.loginText || "Log In"}
                   </button>
                 )}
                 {auth.onSignUp && (
@@ -72,7 +74,7 @@ export const SettingsDropdown: React.FC<SettingsDropdownProps> = ({ darkMode, on
                     }}
                     className="w-full px-4 py-2 text-left text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
-                    Sign Up
+                    {auth.signUpText || "Sign Up"}
                   </button>
                 )}
                 <div className="border-t border-gray-200 dark:border-gray-800 my-2"></div>
