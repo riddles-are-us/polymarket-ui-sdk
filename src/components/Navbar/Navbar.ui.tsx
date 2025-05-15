@@ -28,6 +28,8 @@ export interface NavbarUIProps {
     onLogin?: () => void;
     onSignUp?: () => void;
     onProfileClick?: () => void;
+    loginText?: string;
+    signUpText?: string;
   };
   darkMode: {
     enabled: boolean;
@@ -155,7 +157,7 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
                       onClick={auth.onLogin}
                       className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm hidden sm:block w-20"
                     >
-                      Log In
+                      {auth.loginText || "Log In"}
                     </button>
                   )}
                   {auth.onSignUp && (
@@ -163,7 +165,7 @@ export const NavbarUI: React.FC<NavbarUIProps> = ({
                       onClick={auth.onSignUp}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-full text-sm font-medium w-24"
                     >
-                      Sign Up
+                      {auth.signUpText || "Sign Up"}
                     </button>
                   )}
                 </div>

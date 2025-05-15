@@ -1,7 +1,13 @@
 import { useCallback, useState } from "react";
 import { useThemeContext } from "../../contexts/ThemeContext";
 
-export const useNavbar = () => {
+interface UseNavbarOptions {
+  loginText?: string;
+  signUpText?: string;
+}
+
+export const useNavbar = (options: UseNavbarOptions = {}) => {
+  const { loginText, signUpText } = options;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState<string>();
   const { isDarkMode, toggleDarkMode } = useThemeContext();
@@ -56,6 +62,8 @@ export const useNavbar = () => {
       onLogin: handleLogin,
       onSignUp: handleSignUp,
       onProfileClick: handleProfileClick,
+      loginText,
+      signUpText,
     },
     darkMode: {
       enabled: isDarkMode,
